@@ -18,6 +18,17 @@ theme:
 
 nav:
     - Home: index.md
+    - Chapter 1: chapter-1-resources.md
+    - Chapter 2: chapter-2-resources.md
+    - Chapter 3: chapter-3-resources.md
+    - Chapter 4: chapter-4-resources.md
+    - Chapter 5: chapter-5-resources.md
+    - Chapter 6: chapter-6-resources.md
+    - Chapter 7: chapter-7-resources.md
+    - Chapter 8: chapter-8-resources.md
+    - Chapter 9: chapter-9-resources.md
+    - Chapter 10: chapter-10-resources.md
+
 markdown_extensions:
     - admonition
     - codehilite:
