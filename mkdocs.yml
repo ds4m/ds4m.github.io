@@ -1,1 +1,37 @@
-site_name: My Docs
+site_name: Data Science for Mathematicians
+site_url: https://ds4m.github.io/
+site_author: Nathan Carter
+site_description: "Digital resources for the book Data Science for Mathematicians"
+repo_url: "https://github.com/ds4m/ds4m.github.io"
+copyright: "Copyright 2020 Nathan Carter and several other contributors"
+
+theme:
+    name: windmill
+    colorscheme: default
+    hljs_languages:
+        - python
+        - r
+        - julia
+        - matlab
+        - html
+        - javascript
+
+markdown_extensions:
+    - admonition
+    - codehilite:
+          guess_lang: false
+    - toc:
+          permalink: true
+    - pymdownx.arithmatex
+    - pymdownx.betterem:
+          smart_enable: all
+    - pymdownx.inlinehilite
+    - pymdownx.magiclink
+    - pymdownx.mark
+    - pymdownx.smartsymbols
+    - pymdownx.superfences
+    - pymdownx.tasklist:
+          custom_checkbox: true
+    - pymdownx.tilde
+extra_javascript:
+    - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
