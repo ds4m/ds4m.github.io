@@ -18,16 +18,16 @@ theme:
 
 nav:
     - Home: index.md
-    - Chapter 1: chapter-1-resources.md
-    - Chapter 2: chapter-2-resources.md
-    - Chapter 3: chapter-3-resources.md
-    - Chapter 4: chapter-4-resources.md
-    - Chapter 5: chapter-5-resources.md
-    - Chapter 6: chapter-6-resources.md
-    - Chapter 7: chapter-7-resources.md
-    - Chapter 8: chapter-8-resources.md
-    - Chapter 9: chapter-9-resources.md
-    - Chapter 10: chapter-10-resources.md
+    - Chapter 1, Introduction: chapter-1-resources.md
+    - Chapter 2, Programming with Data: chapter-2-resources.md
+    - Chapter 3, Linear Algebra: chapter-3-resources.md
+    - Chapter 4, Basic Statistics: chapter-4-resources.md
+    - Chapter 5, Clustering: chapter-5-resources.md
+    - Chapter 6, Operations Research: chapter-6-resources.md
+    - Chapter 7, Dimensionality Reduction: chapter-7-resources.md
+    - Chapter 8, Machine Learning: chapter-8-resources.md
+    - Chapter 9, Deep Learning: chapter-9-resources.md
+    - Chapter 10, Topological Data Analysis: chapter-10-resources.md
 
 markdown_extensions:
     - admonition
