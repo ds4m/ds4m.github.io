@@ -158,7 +158,7 @@ Zomorodian (2012) uses the cyclooctane dataset as an example to show that we
 can efficiently recover the homology groups of the conformation space using
 persistent homology. In this section we essentially follow Zomorodian's
 example. We begin with a sample of 1,000 points on the conformation space.
-(This data is publicly available at [Shawn Martin's webpage](http://www.sandia.gov/~smartin/software.html).)
+(This data is publicly available at [Shawn Martin's webpage](https://www.sandia.gov/smartin/software.html).)
 We then compute the resulting persistent homology. We obtain the Betti numbers
 $b_0=b_1=1$ and $b_2=2$, which match the homology groups of the union of a
 sphere with a Klein bottle, glued together along two circles of singularities.
@@ -350,15 +350,15 @@ Ripser is written in C++. You may download the code for Ripser
 [here](https://github.com/Ripser/ripser), which also contains installation
 instructions. Minimal installation instructions are listed below
 
-```
+```sh
 git clone https://github.com/Ripser/ripser.git
 cd ripser
 make all
 ./ripser examples/sphere_3_192.lower_distance_matrix
 ```
 
-For convenience, you may want to download all of the data files from
-[this folder](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/optical_k15_points.txt)
+For convenience, you may want to download all the content of
+[this folder](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/)
 and copy the executable file `ripser` into that folder, then `cd` into the
 same folder.
 
@@ -371,38 +371,38 @@ the examples above with the following commands.
 
 House example on the distance matrix:
 
-```
+```sh
 ./ripser --format distance distance_matrices/house_distances.txt
 ```
 
 House example on the point cloud:
 
-```
+```sh
 ./ripser --format point-cloud point_clouds/house_points.txt
 ```
 
 Torus example, up to 2-dimensional homology:
 
-```
+```sh
 ./ripser --format point-cloud --dim 2 point_clouds/torus_points.txt
 ```
 
 Sphere example, up to scale parameter 1.2:
 
-```
+```sh
 ./ripser --format point-cloud --dim 2 --threshold 1.2 point_clouds/sphere_points.txt
 ```
 
 Cyclooctane example. Try increasing the distance threshold gradually and see
 if your computer can do better than Ripser in your browser:
 
-```
+```sh
 ./ripser --format point-cloud --dim 2 --threshold 1.3 point_clouds/cyclooctane_points.txt
 ```
 
 Optical image patch example:
 
-```
+```sh
 ./ripser --format point-cloud --dim 1 --threshold 1.3 point_clouds/optical_k300_points.txt
 ```
 
@@ -410,7 +410,7 @@ Instead of just printing Ripser's output to the terminal, you can also save it
 to a text file. The below example also saves the output to the text file
 `house_points_ripser_printed.txt`.
 
-```
+```sh
 ./ripser --format point-cloud point_clouds/house_points.txt | tee -a house_points_ripser_printed.txt
 ```
 
@@ -454,7 +454,7 @@ folder as suggested earlier.  (Or, alternatively, make sure that Ripser is in
 your Python path, and then in line 45 of `getBarCodes.py`, change `./ripser` to
 `ripser`). In your terminal, try running the following command.
 
-```
+```sh
 python getBarCodes.py -i distance_matrices/ -o ripser_outputs/
 ```
 
@@ -466,14 +466,14 @@ top of this metric space, and print the output barcodes to the folder
 The following command then separates the Ripser output into barcode intervals
 separated by dimension.
 
-```
+```sh
 python separateRipser.py -i ripser_outputs/ -o barcodes/
 ```
 
 And the following command then plots the corresponding persistence diagrams in
 your current directory.
 
-```
+```sh
 python plotpd.py -i barcodes/ -o ./
 ```
 
@@ -508,10 +508,9 @@ R-TDA](https://rdrr.io/cran/TDA/man/landscape.html).
 ### Persistence images
 
 A second example is persistence images (Adams et al 2017), with Python code
-available from [Nathaniel Saul (Persims)](https://github.com/scikit-tda/persim
-(Persims by Nathaniel Saul) or [Francis
-Motta](https://gitlab.com/csu-tda/PersistenceImages), and with Matlab code
-available [here](https://github.com/CSU-TDA/PersistenceImages).
+available from [Nathaniel Saul (Persims)](https://github.com/scikit-tda/persim)
+or [Francis Motta](https://gitlab.com/csu-tda/PersistenceImages), and with
+Matlab code available [here](https://github.com/CSU-TDA/PersistenceImages).
 
 We'll attempt to describe how to compute persistence images using the Jupyter
 notebooks accompanying [Nathaniel Saul's Persim
@@ -521,7 +520,7 @@ Anaconda as described in that link. Open a new terminal (which is often
 required after new installations) and in that terminal, try the following
 command.
 
-```
+```sh
 jupyter notebook
 ```
 
