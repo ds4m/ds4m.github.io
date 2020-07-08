@@ -42,13 +42,11 @@ The distance matrix for these five points can be downloaded
 It contains the 5x5 distance matrix corresponding to the collection of 5
 points in the plane shown above.  The contents of the file are as follows.
 
-```
-0, 2.0000, 2.8284, 2.0000, 3.1623
+<div class="highlight"><pre><code class="hljs text">0, 2.0000, 2.8284, 2.0000, 3.1623
 2.0000, 0, 2.0000, 2.8284, 3.1623
 2.8284, 2.0000, 0, 2.0000, 1.4142
 2.0000, 2.8482, 2.0000, 0, 1.4142
-3.1623, 3.1623, 1.4142, 1.4142, 0
-```
+3.1623, 3.1623, 1.4142, 1.4142, 0</code></pre></div>
 
 At the Ripser live webpage, enter the following input (including choosing to
 upload that distance matrix file, as shown).
@@ -350,12 +348,10 @@ Ripser is written in C++. You may download the code for Ripser
 [here](https://github.com/Ripser/ripser), which also contains installation
 instructions. Minimal installation instructions are listed below
 
-```sh
-git clone https://github.com/Ripser/ripser.git
+<div class="highlight"><pre><code class="hljs text">git clone https://github.com/Ripser/ripser.git
 cd ripser
 make all
-./ripser examples/sphere_3_192.lower_distance_matrix
-```
+./ripser examples/sphere_3_192.lower_distance_matrix</code></pre></div>
 
 For convenience, you may want to download all the content of
 [this folder](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/)
@@ -371,48 +367,34 @@ the examples above with the following commands.
 
 House example on the distance matrix:
 
-```sh
-./ripser --format distance distance_matrices/house_distances.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format distance distance_matrices/house_distances.txt</code></pre></div>
 
 House example on the point cloud:
 
-```sh
-./ripser --format point-cloud point_clouds/house_points.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format point-cloud point_clouds/house_points.txt</code></pre></div>
 
 Torus example, up to 2-dimensional homology:
 
-```sh
-./ripser --format point-cloud --dim 2 point_clouds/torus_points.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format point-cloud --dim 2 point_clouds/torus_points.txt</code></pre></div>
 
 Sphere example, up to scale parameter 1.2:
 
-```sh
-./ripser --format point-cloud --dim 2 --threshold 1.2 point_clouds/sphere_points.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format point-cloud --dim 2 --threshold 1.2 point_clouds/sphere_points.txt</code></pre></div>
 
 Cyclooctane example. Try increasing the distance threshold gradually and see
 if your computer can do better than Ripser in your browser:
 
-```sh
-./ripser --format point-cloud --dim 2 --threshold 1.3 point_clouds/cyclooctane_points.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format point-cloud --dim 2 --threshold 1.3 point_clouds/cyclooctane_points.txt</code></pre></div>
 
 Optical image patch example:
 
-```sh
-./ripser --format point-cloud --dim 1 --threshold 1.3 point_clouds/optical_k300_points.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format point-cloud --dim 1 --threshold 1.3 point_clouds/optical_k300_points.txt</code></pre></div>
 
 Instead of just printing Ripser's output to the terminal, you can also save it
 to a text file. The below example also saves the output to the text file
 `house_points_ripser_printed.txt`.
 
-```sh
-./ripser --format point-cloud point_clouds/house_points.txt | tee -a house_points_ripser_printed.txt
-```
+<div class="highlight"><pre><code class="hljs text">./ripser --format point-cloud point_clouds/house_points.txt | tee -a house_points_ripser_printed.txt</code></pre></div>
 
 
 ## Python
@@ -454,9 +436,7 @@ folder as suggested earlier.  (Or, alternatively, make sure that Ripser is in
 your Python path, and then in line 45 of `getBarCodes.py`, change `./ripser` to
 `ripser`). In your terminal, try running the following command.
 
-```sh
-python getBarCodes.py -i distance_matrices/ -o ripser_outputs/
-```
+<div class="highlight"><pre><code class="hljs text">python getBarCodes.py -i distance_matrices/ -o ripser_outputs/</code></pre></div>
 
 This will take every distance matrix in the folder `distance_matrices`,
 compute the persistent homology barcodes for the Vietoris-Rips complex built on
@@ -466,16 +446,12 @@ top of this metric space, and print the output barcodes to the folder
 The following command then separates the Ripser output into barcode intervals
 separated by dimension.
 
-```sh
-python separateRipser.py -i ripser_outputs/ -o barcodes/
-```
+<div class="highlight"><pre><code class="hljs text">python separateRipser.py -i ripser_outputs/ -o barcodes/</code></pre></div>
 
 And the following command then plots the corresponding persistence diagrams in
 your current directory.
 
-```sh
-python plotpd.py -i barcodes/ -o ./
-```
+<div class="highlight"><pre><code class="hljs text">python plotpd.py -i barcodes/ -o ./</code></pre></div>
 
 Melissa's code is written to work only with input metric space data in the form
 of a distance matrix, but one could edit it to also work with input metric
@@ -520,9 +496,7 @@ Anaconda as described in that link. Open a new terminal (which is often
 required after new installations) and in that terminal, try the following
 command.
 
-```sh
-jupyter notebook
-```
+<div class="highlight"><pre><code class="hljs text">jupyter notebook</code></pre></div>
 
 This should open a window in an internet browser. In this browser window,
 change directories to `persim/notebooks`, and then open the Jupyter notebook
