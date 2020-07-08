@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="Nathan Carter">
+    <link rel="canonical" href="https://ds4m.github.io/persistent-homology-tutorial/">
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Persistent Homology Tutorial - Data Science for Mathematicians</title>
+    <link href="../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Persistent Homology Tutorial", url: "#_top", children: [
+              {title: "Introduction", url: "#introduction" },
+              {title: "Persistent homology", url: "#persistent-homology" },
+              {title: "Python", url: "#python" },
+              {title: "Topological feature vectors - persistent homology and machine learning", url: "#topological-feature-vectors-persistent-homology-and-machine-learning" },
+              {title: "Topological feature vectors - coding challenges", url: "#topological-feature-vectors-coding-challenges" },
+              {title: "Bibliography", url: "#bibliography" },
+          ]},
+        ];
+
+    </script>
+    <script src="../js/base.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="persistent-homology-tutorial">Persistent Homology Tutorial<a class="headerlink" href="#persistent-homology-tutorial" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>This tutorial accompanies the chapter on Toplogical Data Analysis in the book
+<a href="https://ds4m.github.io">Data Science for Mathematicians</a>.</p>
+<p>The tutorial uses code from <a href="https://github.com/Ripser/ripser">Ripser</a>
+by Ulrich Bauer (Bauer, 2015) and a variety of other places,
+referenced throughout the text.</p>
+<p>The first section of this tutorial (Persistent homology)
+requires no software download.
+However, you do need to download some datasets, which you can get from
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/">this folder in the book's GitHub repository</a>.</p>
+<h2 id="persistent-homology">Persistent homology<a class="headerlink" href="#persistent-homology" title="Permanent link">&para;</a></h2>
+<p>You can get the PDF slides for Henry's introduction to persistent homology
+<a href="https://www.math.colostate.edu/~adams/talks/AnIntroductionToAppliedTopology_Slides_3parts.pdf">here</a>.</p>
+<p>We will be using <a href="https://github.com/Ripser/ripser">Ripser</a> in this tutorial.
+Some slides about how Ripser works are available
+<a href="http://ulrich-bauer.org/ripser-talk.pdf">here</a>.</p>
+<h3 id="ripser-in-your-browser-synthetic-examples">Ripser in your browser - synthetic examples<a class="headerlink" href="#ripser-in-your-browser-synthetic-examples" title="Permanent link">&para;</a></h3>
+<p>The easiest way to run Ripser is in a live demo in your browser, for which no
+installation (and in particular, no Python) is required.
+<a href="http://live.ripser.org/">Try it out!</a>.</p>
+<h4 id="house-example-distance-matrix">House example - distance matrix<a class="headerlink" href="#house-example-distance-matrix" title="Permanent link">&para;</a></h4>
+<p>For example, we can use Ripser to compute the persistent homology of the
+Vietoris-Rips complex of the following 5 points in the plane.</p>
+<p><img alt="Points at (-1,0), (-1,2), (0,3), (1,2), and (1,0)" src="../images/houseCoord.png" /></p>
+<p>The distance matrix for these five points can be downloaded
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/distance_matrices/house_distances.txt">here</a>.
+It contains the 5x5 distance matrix corresponding to the collection of 5
+points in the plane shown above.  The contents of the file are as follows.</p>
+<div class="highlight"><pre><span></span><code>0, 2.0000, 2.8284, 2.0000, 3.1623
+2.0000, 0, 2.0000, 2.8284, 3.1623
+2.8284, 2.0000, 0, 2.0000, 1.4142
+2.0000, 2.8482, 2.0000, 0, 1.4142
+3.1623, 3.1623, 1.4142, 1.4142, 0
+</code></pre></div>
+
+<p>At the Ripser live webpage, enter the following input (including choosing to
+upload that distance matrix file, as shown).</p>
+<p><img alt="Screenshot of Risper live webpage" src="../images/house_distances_input.png" /></p>
+<p>Ripser should give the following output in your browser.</p>
+<p><img alt="Screenshot of persistence barcode output" src="../images/house_example_output.png" /></p>
+<p>Note that the 5 connected components merge into one,
+with merging events happening at scales <span><span class="MathJax_Preview">\sqrt 2</span><script type="math/tex">\sqrt 2</script></span> and 2.
+There is a single 1-dimensional feature, beginning at scale parameter 2 and
+ending at scale parameter <span><span class="MathJax_Preview">\sqrt 8</span><script type="math/tex">\sqrt 8</script></span>.</p>
+<h4 id="house-example-point-cloud">House example - point cloud<a class="headerlink" href="#house-example-point-cloud" title="Permanent link">&para;</a></h4>
+<p>Instead of loading a distance matrix, it is also possible to to load in a set
+of points in Euclidean space, listed by their Euclidean coordinates. See, for
+example, <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/house_points.txt">this file</a>.
+It is the <span><span class="MathJax_Preview">5\times2</span><script type="math/tex">5\times2</script></span> matrix corresponding to the same collection of 5 points
+in the plane. To input a point cloud in Ripser live, simply select the option
+"point cloud" instead of "distance matrix."
+You will get the same output as above!</p>
+<p><img alt="Screenshot of point cloud input to Ripser live" src="../images/house_points_input.png" /></p>
+<h4 id="torus-example">Torus example<a class="headerlink" href="#torus-example" title="Permanent link">&para;</a></h4>
+<p>The following example computes the persistent homology barcodes of a
+<span><span class="MathJax_Preview">20\times20</span><script type="math/tex">20\times20</script></span> grid of 400 points on the unit torus <span><span class="MathJax_Preview">S^1\times S^1</span><script type="math/tex">S^1\times S^1</script></span> in
+<span><span class="MathJax_Preview">\mathbb{R}^4</span><script type="math/tex">\mathbb{R}^4</script></span>, where a small amount of noise has been added to each point.
+You can download the point cloud data file <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/torus_points.txt">here</a>.
+Only a subset of the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser input and dimension 0 output" src="../images/torus_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser dimension 1 output" src="../images/torus_points_output1.png" /></p>
+<p><img alt="Screenshot of Ripser dimension 2 output" src="../images/torus_points_output2.png" /></p>
+<p>Note that the long barcodes (roughly between scale parameter 0.7 and 1.5)
+recover the homology of the torus, with a single connected component, with
+two 1-dimensional holes, and with a single 2-dimensional hole.</p>
+<h4 id="sphere-example-with-a-python-script-to-create-the-points">Sphere example, with a Python script to create the points<a class="headerlink" href="#sphere-example-with-a-python-script-to-create-the-points" title="Permanent link">&para;</a></h4>
+<p>A set of points sampled uniformly at random from the unit sphere can be
+downloaded <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/sphere_points.txt">here</a>.  But you don't have to use that
+particular set of randomly generated points.  You can generate your own, as
+follows.</p>
+<p>Download and run the Python script
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/sphere_points.py">sphere_points.py</a>.
+It will sample 500 points from the unit sphere <span><span class="MathJax_Preview">S^2</span><script type="math/tex">S^2</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^3</span><script type="math/tex">\mathbb{R}^3</script></span>,
+and then save the point cloud to a text file named <code>sphere_points.txt</code>.
+(If you have downloaded the entire code repository, you may want to move that
+file into the <code>point_clouds</code> folder.)</p>
+<p>We can compute the persistent homology barcodes in Ripser. So that the
+computation finishes, we have asked Ripser to compute only up to scale
+parameter 1.2. (One can compute larger examples after downloading Ripser to
+one's machine, as in a later section.) Only a subset of the intervals are shown
+below.</p>
+<p><img alt="Screenshot of Ripser output for dimension 0" src="../images/sphere_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output for dimension 1" src="../images/sphere_points_output1.png" /></p>
+<p><img alt="Screenshot of Ripser output for dimension 2" src="../images/sphere_points_output2.png" /></p>
+<p>Note that the long barcodes (roughly between scale parameter 0.55 and 1.2)
+recover the homology of the 2-sphere, with a single connected component,
+no 1-dimensional holes, and a single 2-dimensional hole.</p>
+<h3 id="ripser-in-your-browser-cyclooctane-data">Ripser in your browser - cyclooctane data<a class="headerlink" href="#ripser-in-your-browser-cyclooctane-data" title="Permanent link">&para;</a></h3>
+<p>This is an example with a real dataset of cyclooctane molecule conformations.</p>
+<p><img alt="Image of a cyclooctane molecule" src="../images/Cyclooctane-boat-chair-3D-balls.png" /></p>
+<p>The cyclooctane molecule consists of a ring of 8 carbon atoms (shown in black),
+each bonded to a pair of hydrogen atoms (shown in white).</p>
+<p>The cyclooctane molecule C<sub>8</sub>H<sub>16</sub> consists of a ring of 8
+carbons atoms, each bonded to a pair of hydrogen atoms. A conformation of this
+molecule is a chemically and physically possible realization in 3D space,
+modulo translations and rotations. The locations of the carbon atoms in a
+conformation determine the locations of the hydrogen atoms via energy
+minimization, and hence each molecule conformation can be mapped to a point in
+<span><span class="MathJax_Preview">\mathbb{R}^{24}=\mathbb{R}^{8\times3}</span><script type="math/tex">\mathbb{R}^{24}=\mathbb{R}^{8\times3}</script></span>, as there are eight carbon atoms in the
+molecule and each carbon location is represented by three coordinates <span><span class="MathJax_Preview">x,y,z</span><script type="math/tex">x,y,z</script></span>.
+This map realizes the conformation space of  cyclooctane as a subset of
+<span><span class="MathJax_Preview">\mathbb{R}^{24}</span><script type="math/tex">\mathbb{R}^{24}</script></span>.</p>
+<p>It turns out that the conformation space is a two-dimensional stratefied space,
+i.e., a two-dimensional manifold with singularities.  Furthermore, Brown et al.
+(2008), Martin et al. (2010), and Martin and Watson (2011) show that the
+conformation space of  cyclooctane is the union of a sphere with a Klein
+bottle, glued together along two circles of singularities.  (See Chapter 10 of
+<a href="https://ds4m.github.io/">Data Science for Mathematicians</a> for more detail, or
+Figures 7 and 8 in Martin and Watson (2011).) Indeed, the algorithm they
+develop allows them to triangulate this conformation space from a finite
+sample.</p>
+<p>Zomorodian (2012) uses the cyclooctane dataset as an example to show that we
+can efficiently recover the homology groups of the conformation space using
+persistent homology. In this section we essentially follow Zomorodian's
+example. We begin with a sample of 1,000 points on the conformation space.
+(This data is publicly available at <a href="http://www.sandia.gov/~smartin/software.html">Shawn Martin's webpage</a>.)
+We then compute the resulting persistent homology. We obtain the Betti numbers
+<span><span class="MathJax_Preview">b_0=b_1=1</span><script type="math/tex">b_0=b_1=1</script></span> and <span><span class="MathJax_Preview">b_2=2</span><script type="math/tex">b_2=2</script></span>, which match the homology groups of the union of a
+sphere with a Klein bottle, glued together along two circles of singularities.</p>
+<p>The following example computes the persistent homology barcodes of 1,000 points
+from the configuration space of cyclooctane molecules in <span><span class="MathJax_Preview">\mathbb{R}^{24}</span><script type="math/tex">\mathbb{R}^{24}</script></span>.
+This dataset is available <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/cyclooctane_points.txt">here</a>.</p>
+<p>So that the computation finishes, we have asked Ripser to compute only up to
+scale parameter 1.3. (One can compute larger examples after downloading Ripser
+to one's machine, as in a later section.) Only a subset of the intervals are
+shown below.</p>
+<p><img alt="Screenshot of Ripser output in dimension 0" src="../images/cyclooctane_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 1" src="../images/cyclooctane_points_output1.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 2" src="../images/cyclooctane_points_output2.png" /></p>
+<p>The long barcodes (roughly between scale parameter 0.65 and 1.25), with one
+connected component, one 1-dimensional hole, and two 2-dimensional holes, match
+the homology of the union of a sphere with a Klein bottle, glued together along
+two circles of singularities.</p>
+<h3 id="ripser-in-your-browser-optical-image-patch-data">Ripser in your browser - optical image patch data<a class="headerlink" href="#ripser-in-your-browser-optical-image-patch-data" title="Permanent link">&para;</a></h3>
+<p>This is an example with a real dataset of optical image patch data.</p>
+<p>The optical image database collected by van Hateren and van der Schaaf (1998)
+contains black and white digital photographs from a variety of indoor and
+outdoor scenes. Lee et al. (2003) study <span><span class="MathJax_Preview">3\times3</span><script type="math/tex">3\times3</script></span> patches from these images,
+and Carlsson et al. (2008) continue the analysis of image patches using
+persistent homology. Carlsson et al. (2008) begin with a large collection of
+high-contrast, normalized <span><span class="MathJax_Preview">3\times3</span><script type="math/tex">3\times3</script></span> pixel patches, each thought of as a point
+in <span><span class="MathJax_Preview">\mathbb{R}^9</span><script type="math/tex">\mathbb{R}^9</script></span>. They change to the Discrete Cosine Transform (DCT) basis,
+which maps the patches to the unit sphere <span><span class="MathJax_Preview">S^7</span><script type="math/tex">S^7</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^8</span><script type="math/tex">\mathbb{R}^8</script></span>.  They select
+from this space the 30% densest vectors, where density is based on the distance
+from a point to its 300<sup>th</sup> nearest neighbor. In Carlsson et al.  (2008), this
+dense core subset is denoted <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span>. In the next example we verify the
+result from Carlsson et al. (2008): <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span> has the topology of a circle.</p>
+<p>The following example computes the persistent homology barcodes of 1,000 points
+from <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span>.
+The dataset can be downloaded <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/optical_k300_points.txt">here</a>.</p>
+<p>So that the computation finishes, we have asked Ripser to compute only up to
+scale parameter 1.3. (One can compute larger examples after downloading Ripser
+to one's machine, as in a later section.) Only a subset of the intervals are
+shown below.</p>
+<p><img alt="Screenshot of Ripser output in dimension 0" src="../images/optical_k300_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 1" src="../images/optical_k300_points_output1.png" /></p>
+<p>The long barcodes (roughly between scale parameter 0.5 and 1.25), with one
+connected component and one 1-dimensional hole, have the homology of a circle.
+This is good evidence that the core subset <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span> is well-approximated by
+a circle. </p>
+<p>We plot the projection of these points onto the first two linear gradient
+Discrete Cosine Transform basis vectors.</p>
+<p><img alt="Graph of the projection just described" src="../images/optical_k300_projected.png" /></p>
+<p>The projection of <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span> above shows a circle. It is called the optical
+primary circle and is parameterized as shown below.</p>
+<p><img alt="Parameterization of a circle with 8 small black-and-white images" src="../images/primaryCircle.png" /></p>
+<p>We can also consider the 3-circle model, which arises from the dataset
+<span><span class="MathJax_Preview">X(15,30)</span><script type="math/tex">X(15,30)</script></span> that corresponds to a more local estimate of density.
+The dataset can be downloaded <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/optical_k15_points.txt">here</a>.</p>
+<p>So that the computation finishes, we select only 1,000 points from <span><span class="MathJax_Preview">X(15,30)</span><script type="math/tex">X(15,30)</script></span>,
+and we have asked Ripser to compute only up to scale parameter 1.2. (One can
+compute larger examples after downloading Ripser to one's machine, as in a
+later section.) Only a subset of the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser output in dimension 0" src="../images/optical_k15_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 1" src="../images/optical_k15_points_output1.png" /></p>
+<p>The barcodes with one connected component and five 1-dimensional holes
+correspond to the 3-circle model for the core subset <span><span class="MathJax_Preview">X(15,30)</span><script type="math/tex">X(15,30)</script></span>. Much more
+convincing (longer) intervals can be obtained by using more points and
+computing with Ripser downloaded to your local machine.</p>
+<p>We plot the projection of these points onto the first two linear gradient
+Discrete Cosine Transform basis vectors.</p>
+<p><img alt="Graph of the projection just described" src="../images/nk15c30.png" /></p>
+<p>The corresponding three-circle model for optical images is shown below.</p>
+<p><img alt="Three-circle model for optical images" src="../images/threeCircle.png" /></p>
+<h3 id="exercises-on-persistent-homology">Exercises on persistent homology<a class="headerlink" href="#exercises-on-persistent-homology" title="Permanent link">&para;</a></h3>
+<p><strong>Exercise</strong>: Write a script (say in Python, or some other language) that
+selects 400 points uniformly at random (or approximately uniformly at random)
+from the annulus
+$$ \left\{ (x,y)\mid 0.95^2\leq x^2+y^2\leq1.05^2 \right\} $$
+in <span><span class="MathJax_Preview">\mathbb{R}^2</span><script type="math/tex">\mathbb{R}^2</script></span>. Compute its persistent homology barcodes using Ripser.</p>
+<p><strong>Exercise</strong>: Write a script (say in Python, or some other language) that
+selects 400 points uniformly at random (or approximately uniformly at random)
+from the "coconut shell"
+$$ \left\{ (x,y,z) \mid 0.95^2\leq x^2+y^2+z^2\leq 1.05^2 \right\} $$
+in <span><span class="MathJax_Preview">\mathbb{R}^3</span><script type="math/tex">\mathbb{R}^3</script></span>. Compute its persistent homology barcodes using Ripser.</p>
+<p><strong>Exercise</strong>: Write a Python script (or code in some other language) that will
+select <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> evenly-spaced points from the unit circle in the plane. Compute the
+persistent homology of the Vietoris-Rips complex of 4, 6, 9, 12, 15, and 20
+equally spaced points on the circle.
+Do you get ever homology above dimension 1?</p>
+<p><strong>Exercise</strong>: Find a planar dataset <span><span class="MathJax_Preview">Z</span><script type="math/tex">Z</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^2</span><script type="math/tex">\mathbb{R}^2</script></span> and a filtration
+value <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> such that <span><span class="MathJax_Preview">VR(Z,t)</span><script type="math/tex">VR(Z,t)</script></span> has nonzero Betti number <span><span class="MathJax_Preview">b_2</span><script type="math/tex">b_2</script></span>. Do a computation
+in Ripser to confirm your answer. </p>
+<p><strong>Exercise</strong>: Find a planar dataset <span><span class="MathJax_Preview">Z</span><script type="math/tex">Z</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^2</span><script type="math/tex">\mathbb{R}^2</script></span> and a filtration
+value <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> such that <span><span class="MathJax_Preview">VR(Z,t)</span><script type="math/tex">VR(Z,t)</script></span> has nonzero Betti number <span><span class="MathJax_Preview">b_6</span><script type="math/tex">b_6</script></span>. Do a computation
+in Ripser to confirm your answer. </p>
+<p><strong>Exercise</strong>: Let <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> be the 8 vertices of the cube in <span><span class="MathJax_Preview">\mathbb{R}^3</span><script type="math/tex">\mathbb{R}^3</script></span>,
+<span><span class="MathJax_Preview">X=\{(\pm 1,\pm 1,\pm 1)\}</span><script type="math/tex">X=\{(\pm 1,\pm 1,\pm 1)\}</script></span>.  Equip <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> with the Euclidean metric.
+Compute the persistent homology of the Vietoris-Rips complex of <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span>.
+Do you get ever homology above dimension 2?</p>
+<p><strong>Exercise</strong>: One way to produce a torus is to take a square <span><span class="MathJax_Preview">[0, 1] \times [0,
+1]</span><script type="math/tex">[0, 1] \times [0,
+1]</script></span> and then identify opposite sides. This is called a flat torus. More
+explicitly, the flat torus is the quotient space <span><span class="MathJax_Preview">([0, 1] \times [0, 1]) /
+\sim</span><script type="math/tex">([0, 1] \times [0, 1]) /
+\sim</script></span>, where <span><span class="MathJax_Preview">(0, y) \sim (1, y)</span><script type="math/tex">(0, y) \sim (1, y)</script></span> for all <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> in <span><span class="MathJax_Preview">[0, 1]</span><script type="math/tex">[0, 1]</script></span> and where <span><span class="MathJax_Preview">(x, 0)
+\sim (x, 1)</span><script type="math/tex">(x, 0)
+\sim (x, 1)</script></span> for all <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> in <span><span class="MathJax_Preview">[0, 1]</span><script type="math/tex">[0, 1]</script></span>.  The Euclidean metric on <span><span class="MathJax_Preview">[0, 1] \times
+[0, 1]</span><script type="math/tex">[0, 1] \times
+[0, 1]</script></span> induces a metric on the flat torus.  For example, in the induced metric
+on the flat torus, the distance between <span><span class="MathJax_Preview">(0, 1/2)</span><script type="math/tex">(0, 1/2)</script></span> and <span><span class="MathJax_Preview">(1, 1/2)</span><script type="math/tex">(1, 1/2)</script></span> is zero,
+since these two points are identified. The distance between <span><span class="MathJax_Preview">(1/10, 1/2)</span><script type="math/tex">(1/10, 1/2)</script></span> and
+<span><span class="MathJax_Preview">(9/10, 1/2)</span><script type="math/tex">(9/10, 1/2)</script></span> is <span><span class="MathJax_Preview">2/10</span><script type="math/tex">2/10</script></span>, by passing through the point <span><span class="MathJax_Preview">(0, 1/2) \sim (1, 1/2)</span><script type="math/tex">(0, 1/2) \sim (1, 1/2)</script></span>.</p>
+<p>Write a Python script (or code in another language) that selects 400 random
+points from the square <span><span class="MathJax_Preview">[0, 1] \times [0, 1]</span><script type="math/tex">[0, 1] \times [0, 1]</script></span> and then computes the
+<span><span class="MathJax_Preview">400\times400</span><script type="math/tex">400\times400</script></span> distance matrix for these points under the induced metric on the
+flat torus.  Use Ripser to compute the persistent homology of this metric
+space.</p>
+<p><strong>Exercise</strong>: One way to produce a Klein bottle is to take a square <span><span class="MathJax_Preview">[0, 1]
+\times [0, 1]</span><script type="math/tex">[0, 1]
+\times [0, 1]</script></span> and then identify opposite edges, with the left and right sides
+identified with a twist. This is called a flat Klein bottle. More explicitly,
+the flat Klein bottle is the quotient space <span><span class="MathJax_Preview">([0, 1] \times [0, 1]) / \sim</span><script type="math/tex">([0, 1] \times [0, 1]) / \sim</script></span>,
+where <span><span class="MathJax_Preview">(0, y) \sim (1, 1 - y)</span><script type="math/tex">(0, y) \sim (1, 1 - y)</script></span> for all <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> in <span><span class="MathJax_Preview">[0, 1]</span><script type="math/tex">[0, 1]</script></span> and where <span><span class="MathJax_Preview">(x, 0) \sim
+(x, 1)</span><script type="math/tex">(x, 0) \sim
+(x, 1)</script></span> for all <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> in <span><span class="MathJax_Preview">[0, 1]</span><script type="math/tex">[0, 1]</script></span>. The Euclidean metric on <span><span class="MathJax_Preview">[0, 1] \times [0, 1]</span><script type="math/tex">[0, 1] \times [0, 1]</script></span>
+induces a metric on the flat Klein bottle. For example, in the induced metric
+on the flat Klein bottle, the distance between <span><span class="MathJax_Preview">(0, 4/10)</span><script type="math/tex">(0, 4/10)</script></span> and <span><span class="MathJax_Preview">(1, 6/10)</span><script type="math/tex">(1, 6/10)</script></span> is
+zero, since these two points are identified. The distance between <span><span class="MathJax_Preview">(1/10,
+4/10)</span><script type="math/tex">(1/10,
+4/10)</script></span> and <span><span class="MathJax_Preview">(9/10, 6/10)</span><script type="math/tex">(9/10, 6/10)</script></span> is <span><span class="MathJax_Preview">2/10</span><script type="math/tex">2/10</script></span>, by passing through the point <span><span class="MathJax_Preview">(0, 4/10)
+\sim (1, 6/10)</span><script type="math/tex">(0, 4/10)
+\sim (1, 6/10)</script></span>.</p>
+<p>Write a Python script (or code in another language) that selects 400 random
+points from the square <span><span class="MathJax_Preview">[0, 1] \times [0, 1]</span><script type="math/tex">[0, 1] \times [0, 1]</script></span> and then computes the
+<span><span class="MathJax_Preview">400\times400</span><script type="math/tex">400\times400</script></span> distance matrix for these points under the induced metric on the
+flat Klein bottle. Use Ripser to compute the persistent homology of this metric
+space.</p>
+<p>If you have Ripser installed on your local machine, change to
+<span><span class="MathJax_Preview">\mathbb{Z}/3\mathbb{Z}</span><script type="math/tex">\mathbb{Z}/3\mathbb{Z}</script></span> coefficients and see how the persistent homology
+changes.</p>
+<p><strong>Exercise</strong>: One way to produce a projective plane is to take the unit sphere
+<span><span class="MathJax_Preview">S^2</span><script type="math/tex">S^2</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^3</span><script type="math/tex">\mathbb{R}^3</script></span> and then identify antipodal points. More explicitly,
+the projective plane is the quotient space <span><span class="MathJax_Preview">S^2 / (x \sim -x)</span><script type="math/tex">S^2 / (x \sim -x)</script></span>. The Euclidean
+metric on <span><span class="MathJax_Preview">S^2</span><script type="math/tex">S^2</script></span> induces a metric on the projective plane.</p>
+<p>Write a Python script (or code in another language)  that selects 400 random
+points from the unit sphere <span><span class="MathJax_Preview">S^2</span><script type="math/tex">S^2</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^3</span><script type="math/tex">\mathbb{R}^3</script></span> and then computes the
+<span><span class="MathJax_Preview">400\times400</span><script type="math/tex">400\times400</script></span> distance matrix for these points under the induced metric on the
+projective plane. Use Ripser to compute the persistent homology of this metric
+space.</p>
+<p>If you have Ripser installed on your local machine, change to
+<span><span class="MathJax_Preview">\mathbb{Z}/3\mathbb{Z}</span><script type="math/tex">\mathbb{Z}/3\mathbb{Z}</script></span> coefficients and see how the persistent homology
+changes.</p>
+<h3 id="ripser-on-your-machine">Ripser on your machine<a class="headerlink" href="#ripser-on-your-machine" title="Permanent link">&para;</a></h3>
+<p>A more advanced (but very useful) step is to now download Ripser to your
+machine and to run it locally. This allows you to perform larger computations.
+Ripser is written in C++. You may download the code for Ripser
+<a href="https://github.com/Ripser/ripser">here</a>, which also contains installation
+instructions. Minimal installation instructions are listed below</p>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/Ripser/ripser.git
+cd ripser
+make all
+./ripser examples/sphere_3_192.lower_distance_matrix
+</code></pre></div>
+
+<p>For convenience, you may want to download all of the data files from
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/optical_k15_points.txt">this folder</a>
+and copy the executable file <code>ripser</code> into that folder, then <code>cd</code> into the
+same folder.</p>
+<p>You can use the flag <code>--format distances</code> to specify you are computing on a
+distance matrix, or <code>--format point-cloud</code> to specify you are computing on a
+point cloud. The flag <code>--dim k</code> specifies that homology is computed only up to
+dimension <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>, and the flag <code>--threshold t</code> specifies that persistent homology
+is computed only up to scale parameter <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span>. For example, we can recreate all of
+the examples above with the following commands.</p>
+<p>House example on the distance matrix:</p>
+<div class="highlight"><pre><span></span><code>./ripser --format distance distance_matrices/house_distances.txt
+</code></pre></div>
+
+<p>House example on the point cloud:</p>
+<div class="highlight"><pre><span></span><code>./ripser --format point-cloud point_clouds/house_points.txt
+</code></pre></div>
+
+<p>Torus example, up to 2-dimensional homology:</p>
+<div class="highlight"><pre><span></span><code>./ripser --format point-cloud --dim 2 point_clouds/torus_points.txt
+</code></pre></div>
+
+<p>Sphere example, up to scale parameter 1.2:</p>
+<div class="highlight"><pre><span></span><code>./ripser --format point-cloud --dim 2 --threshold 1.2 point_clouds/sphere_points.txt
+</code></pre></div>
+
+<p>Cyclooctane example. Try increasing the distance threshold gradually and see
+if your computer can do better than Ripser in your browser:</p>
+<div class="highlight"><pre><span></span><code>./ripser --format point-cloud --dim 2 --threshold 1.3 point_clouds/cyclooctane_points.txt
+</code></pre></div>
+
+<p>Optical image patch example:</p>
+<div class="highlight"><pre><span></span><code>./ripser --format point-cloud --dim 1 --threshold 1.3 point_clouds/optical_k300_points.txt
+</code></pre></div>
+
+<p>Instead of just printing Ripser's output to the terminal, you can also save it
+to a text file. The below example also saves the output to the text file
+<code>house_points_ripser_printed.txt</code>.</p>
+<div class="highlight"><pre><span></span><code>./ripser --format point-cloud point_clouds/house_points.txt | tee -a house_points_ripser_printed.txt
+</code></pre></div>
+
+<h2 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h2>
+<p>The remainder of this tutorial requires one to have Python and/or the Ripser
+software package installed. </p>
+<p>Installing and running new code can be frustrating, especially if it is in a
+language (perhaps Python) that is unfamiliar to you. Nevertheless, we believe
+that it is extremely important for all practitioners of machine learning to
+have some exposure to Python. For this reason, the time you spend getting
+Python running on your machine is time well spent, even though this can feel
+like a frustrating investment of time.</p>
+<p>If you don't yet have Python, and if you are a PC user, then we recommend
+installing <a href="https://www.anaconda.com/download">Anaconda</a>. If you don't yet have
+Python, and if you are a Mac user, then we recommend installing Python 2.7.15
+from <a href="https://www.python.org/downloads/release/python-2715/">here</a>. We expect
+the code to work with an existing version of Python that you may happen to have
+already.</p>
+<h3 id="ripser-with-python">Ripser with Python<a class="headerlink" href="#ripser-with-python" title="Permanent link">&para;</a></h3>
+<p>Melissa McGuirl has written very nice code for using Ripser with Python, which
+is what we will use in this section. In particular, the file
+<code>house_points_ripser_printed.txt</code> that we saved in the section above is not in
+a format that is terribly easy to work with. Melissa's code reformats Ripser
+output in a convenient manner.</p>
+<p>Alternatively, there is a Cython wrapper for Ripser available which might be
+more efficient and better for non-Linux machines. The wrapper is available
+<a href="https://pypi.org/project/ripser/">here</a> or 
+<a href="https://ripser.scikit-tda.org/">here</a>.</p>
+<p>Ensure you are in the folder of data files mentioned
+<a href="#ripser-on-your-machine">above</a> and copy the Ripser executable into that
+folder as suggested earlier.  (Or, alternatively, make sure that Ripser is in
+your Python path, and then in line 45 of <code>getBarCodes.py</code>, change <code>./ripser</code> to
+<code>ripser</code>). In your terminal, try running the following command.</p>
+<div class="highlight"><pre><span></span><code>python getBarCodes.py -i distance_matrices/ -o ripser_outputs/
+</code></pre></div>
+
+<p>This will take every distance matrix in the folder <code>distance_matrices</code>,
+compute the persistent homology barcodes for the Vietoris-Rips complex built on
+top of this metric space, and print the output barcodes to the folder
+<code>ripser_outputs</code>.</p>
+<p>The following command then separates the Ripser output into barcode intervals
+separated by dimension.</p>
+<div class="highlight"><pre><span></span><code>python separateRipser.py -i ripser_outputs/ -o barcodes/
+</code></pre></div>
+
+<p>And the following command then plots the corresponding persistence diagrams in
+your current directory.</p>
+<div class="highlight"><pre><span></span><code>python plotpd.py -i barcodes/ -o ./
+</code></pre></div>
+
+<p>Melissa's code is written to work only with input metric space data in the form
+of a distance matrix, but one could edit it to also work with input metric
+space data in the form of a point cloud, for example.</p>
+<h2 id="topological-feature-vectors-persistent-homology-and-machine-learning">Topological feature vectors - persistent homology and machine learning<a class="headerlink" href="#topological-feature-vectors-persistent-homology-and-machine-learning" title="Permanent link">&para;</a></h2>
+<p>There are by now a wide variety of ways to incorporate persistent homology
+information into feature vectors for a machine learning task (Adcock et al
+2016, Adams et al 2017, Atienza 2018, Bendich et al 2016, Bubenik 2015, Bubenik
+&amp; Dlotko 2016, Carriere et al 2015, Carriere &amp; Bauer 2018, Carriere et al 2018,
+Chazal &amp; Divol 2018, Chen et al 2015, Chevyrev et al 2018, Chung et al 2009, Di
+Fabio &amp; Ferri 2015, Hofer et al 2017, Kalisnik 2018, Reininghaus et al 2015,
+Skraba 2018, Topaz et al 2015, Zeppelzauer et al 2016). We tersely describe a
+few of these approaches.</p>
+<p>For Henry's "from persistent homology to machine learning" survey slides from
+the ICERM TRIPODS bootcamp, please see
+<a href="http://www.math.colostate.edu/~adams/talks/PHtoML_Slides.pdf">here</a>.</p>
+<h3 id="persistence-landscpaes">Persistence landscpaes<a class="headerlink" href="#persistence-landscpaes" title="Permanent link">&para;</a></h3>
+<p>One example is persistence landscapes (Bubenik 2015).  Bubenik &amp; Dlotko (2017)
+have <a href="https://www.math.upenn.edu/~dlotko/persistenceLandscape.html">made their code
+available</a>, and
+persistence landscapes are also <a href="https://rdrr.io/cran/TDA/man/landscape.html">implementable in
+R-TDA</a>.</p>
+<h3 id="persistence-images">Persistence images<a class="headerlink" href="#persistence-images" title="Permanent link">&para;</a></h3>
+<p>A second example is persistence images (Adams et al 2017), with Python code
+available from [Nathaniel Saul (Persims)](<a href="https://github.com/scikit-tda/persim">https://github.com/scikit-tda/persim</a>
+(Persims by Nathaniel Saul) or <a href="https://gitlab.com/csu-tda/PersistenceImages">Francis
+Motta</a>, and with Matlab code
+available <a href="https://github.com/CSU-TDA/PersistenceImages">here</a>.</p>
+<p>We'll attempt to describe how to compute persistence images using the Jupyter
+notebooks accompanying <a href="https://github.com/scikit-tda/persim">Nathaniel Saul's Persim
+code</a>.  First, download the Persim code.
+Second, install <a href="http://jupyter.org/install.html">Jupyter</a>, perhaps using
+Anaconda as described in that link. Open a new terminal (which is often
+required after new installations) and in that terminal, try the following
+command.</p>
+<div class="highlight"><pre><span></span><code>jupyter notebook
+</code></pre></div>
+
+<p>This should open a window in an internet browser. In this browser window,
+change directories to <code>persim/notebooks</code>, and then open the Jupyter notebook
+<code>Persistence Images.ipynb</code>. You should then be able to run the code in the
+browser!</p>
+<h2 id="topological-feature-vectors-coding-challenges">Topological feature vectors - coding challenges<a class="headerlink" href="#topological-feature-vectors-coding-challenges" title="Permanent link">&para;</a></h2>
+<h3 id="6-shape-classes">6 shape classes<a class="headerlink" href="#6-shape-classes" title="Permanent link">&para;</a></h3>
+<p>Change directory to the folder
+<code>topological-data-analysis/topological-feature-vectors/data-6-shape-classes</code>.
+<font color='red'>NOTE: Folder missing--must fix!</font>
+This subfolder contains persistence diagram data for 6 shape classes:</p>
+<ol>
+<li>A unit cube</li>
+<li>A circle of diameter one</li>
+<li>A sphere of diameter one</li>
+<li>Three clusters with centers randomly chosen in the unit cube</li>
+<li>Three clusters within three clusters</li>
+<li>A torus with a major diameter of one and a minor diameter of one half.</li>
+</ol>
+<p>These shape classes are described in Section 6.1 of the paper <a href="http://jmlr.org/papers/v18/16-337.html">Persistence
+Images: A Stable Vector Representation of Persistent
+Homology</a>, and are shown below.</p>
+<p><img alt="Illustrations of the six shape classes listed above" src="../images/6ShapeClasses.png" /></p>
+<p>We produced 25 point clouds of 500 randomly sampled points from each shape
+class. We then added a level of Gaussian noise to each point, at a noise level
+neta=0.1 or neta=0.05. We then have already computed the persistent homology
+intervals in homological dimension i=0 and i=1. <font color='red'>Should "neta" here be "eta" (Greek letter)?  If so, we can then use MathJax on these equations.</font></p>
+<p>For example, the file <code>ToyData_PD_n05_23_6_0.txt</code> corresponds to noise level
+neta=0.05, the 23<sup>rd</sup> point cloud randomly sampled from shape class 6., with
+persistent homology computed in dimension 0. Each row of this file has two
+entries: the birth and death time of a 0-dimensional persistent homology
+interval.</p>
+<p>By contrast, the file <code>ToyData_PD_n1_21_3_1.txt</code> corresponds to noise level
+neta=1, the 21<sup>st</sup> point cloud randomly sampled from shape class 3., with
+persistent homology computed in dimension 1. Each row of this file has two
+entries: the birth and death time of a 1-dimensional persistent homology
+interval.</p>
+<p>Your task is to use machine learning to distinguish these six classes from each
+other. In a K-medoids clustering test, some accuracies and computation times
+are displayed for bottleneck distances, Wasserstein distances, persistence
+landscapes, and persistence images in Table 1 of <a href="http://jmlr.org/papers/v18/16-337.html">Persistence Images: A Stable
+Vector Representation of Persistent
+Homology</a>.  Do you have ideas for
+beating these accuracies or computation times?</p>
+<p><img alt="Table comparing classification accuracy and time for persistence diagrams, persistence landscapes, and persistence images" src="../images/table1.png" /></p>
+<p>In the above table, PD means the persistence diagram equipped with either the
+<span><span class="MathJax_Preview">L^1</span><script type="math/tex">L^1</script></span> (1-Wasserstein), <span><span class="MathJax_Preview">L^2</span><script type="math/tex">L^2</script></span> (2-Wasserstein), or sup (bottleneck) metrics. PL
+means the persistence landscape, equipped with either the <span><span class="MathJax_Preview">L^1</span><script type="math/tex">L^1</script></span>, <span><span class="MathJax_Preview">L^2</span><script type="math/tex">L^2</script></span>, or sup
+metric. PI means the persistence image, equipped with either the <span><span class="MathJax_Preview">L^1</span><script type="math/tex">L^1</script></span>, <span><span class="MathJax_Preview">L^2</span><script type="math/tex">L^2</script></span>,
+or sup metric. But you should develop your own techniques for turning barcodes
+into feature vectors, and see how they compare!</p>
+<p>Some Matlab code for creating points from these shape classes is available
+<a href="https://github.com/CSU-TDA/PersistenceImages/tree/master/matlab_code/sixShapeClasses">here</a>.</p>
+<h2 id="bibliography">Bibliography<a class="headerlink" href="#bibliography" title="Permanent link">&para;</a></h2>
+<p>A. Adcock, E. Carlsson, and G. Carlsson. The ring of algebraic functions on
+persistence bar codes. <em>Homology, Homotopy and Applications</em>, 18:381-402, 2016</p>
+<p>H. Adams, S. Chepushtanova, T. Emerson, E. Hanson, M. Kirby, F. Motta, R.
+Neville, C. Peterson, P. Shipman, and L. Ziegelmeier. Persistence images: A
+stable vector representation of persistent homology. <em>Journal of Machine
+Learning Research</em>, 18:1-35, 2017.</p>
+<p>P. Bendich, J.S. Marron, E. Miller, A. Pieloch, and S. Skwerer, Persistent
+homology analysis of brain artery trees. <em>Ann. Appl. Stat.</em>, 10:198-218, 2016.</p>
+<p>M. A. Armstrong. <em>Basic Topology</em>. Springer, New York, Berlin, 1983.</p>
+<p>N. Atienza, R. Gonzalez-Diaz, and M. Soriano-Trigueros. On the stability of
+persistent entropy and new summary functions for topological data analysis.
+arXiv:1803.08304, 2018.</p>
+<p>U. Bauer. Ripser: A lean C++ code for the computation of Vietoris-Rips
+persistence barcodes. Software available at <a href="https://github.com/Ripser/ripser">https://github.com/Ripser/ripser</a>,
+2015.</p>
+<p>M. W. Brown, S. Martin, S. N. Pollock, E. A. Coutsias, and J. P. Watson.
+Algorithmic dimensionality reduction for molecular structure analysis. <em>Journal
+of Chemical Physics</em>, 129:064118, 2008.</p>
+<p>P. Bubenik. Statistical topological data analysis using persistence landscapes.
+<em>Journal of Machine Learning Research</em>, 16:77-10, 2015.</p>
+<p>P. Bubenik and P. Dlotko, A persistence lanscapes toolbox for topological
+statistics. <em>Journal of Symbolic Computation</em>, 78:91-114, 2017.</p>
+<p>G. Carlson, T. Ishkhanov, V. de Silva, and A. Zomorodian. On the local behavior
+of spaces of natural images. <em>Int. J. Computer Vision</em>, 76:1-12, 2008.</p>
+<p>M. Carriere, U. Bauer. On the metric distortion of embedding persistence
+diagrams into reproducing kernel Hilbert spaces. arXiv:1806.06924, 2018</p>
+<p>M. Carriere, M. Cuturi, and S. Oudot. Sliced Wasserstein kernel for persistence
+diagrams. arXiv:1706.03358, 2017.</p>
+<p>M. Carriere, S. Oudot, and M. Ovsjanikov. Stable topological signatures for
+points on 3d shapes. In <em>Computer Graphics Forum</em>, 34:1-2, 2015.</p>
+<p>Y.-C. Chen, D. Wong, A. Rinaldo, and L. Wasserman. Statistical analysis of
+persistence intensity functions. arXiv:1510.02502, 2015.</p>
+<p>L. Crawford, A. Monod, A. X. Chen, S. Mukherjee, and R. Rabadan. Functional
+data analysis using a topological summary statistic: The smooth Euler
+characteristic transform. arXiv: <a href="https://arxiv.org/abs/1611.06818">https://arxiv.org/abs/1611.06818</a>, 2017.</p>
+<p>F. Chazal, V. de Silva, and S. Oudot. Persistence stability for geometric
+complexes. <em>Geometriae Dedicata</em>, pages 1-22, 2013.</p>
+<p>F. Chazal and V. Divol. The density of expected persistence diagrams and its
+kernel based estimation. arXiv:1802.10457, 2018.</p>
+<p>I. Chevyrev, V. Nanda, H. Oberhauser. Persistence paths and signature features
+in topological data analysis. arXiv:1806.00381, 2018.</p>
+<p>M.K. Chung, P. Bubenik, and P.T. Kim. Persistence diagrams of cortical surface
+data. In <em>Information Processing in Medical Imaging</em>, 386-297, Springer, 2009.</p>
+<p>B. Di Fabio and M. Ferri. Comparing persistence diagrams through complex
+vectors. In <em>International Conference on Image Analysis and Processing</em>, LNCS
+9279, pages 294-305, 2015.</p>
+<p>H. Edelsbrunner and J. Harer. <em>Computational Topology: An Introduction</em>.
+American Mathematical Society, Providence, 2010.</p>
+<p>H. Edelsbrunner, D. Letscher, and A. Zomorodian. Topological persistence and
+simplification. <em>Discrete Comput. Geom.</em>, 28:511-533, 2002.</p>
+<p>A. Hatcher. <em>Algebraic Topology</em>. Cambridge University Press, Cambridge, 2002.</p>
+<p>C. Hofer, R. Kwit, M. Niethammer, and A. Uhl. Deep learning with topological
+signatures. In <em>Advances in Neural Information Processing Systems</em>, pages
+1634-1644, 2017.</p>
+<p>S. Kalisnik. Tropical coordinates on the space of persistence barcodes. In
+<em>Foundations of Computational Mathematics</em>, pages 1-29, 2018.</p>
+<p>A. B. Lee, K. S. Pedersen, and D. Mumford. The nonlinear statistics of
+high-contrast patches in natural images. <em>Int. J. Comput. Vision</em>, 54:83-103,
+2003.</p>
+<p>S. Martin and J. P. Watson. Non-manifold surface reconstruction from
+high-dimensional point cloud data. <em>Computational Geometry</em>, 44:427-441, 2011.</p>
+<p>S. Martin, A. Thompson, E. A. Coutsias, and J. P. Watson. Topology of
+cyclo-octane energy landscape. <em>Journal of Chemical Physics</em>, 132: 234115,
+2010.</p>
+<p>J. Reininghaus, S. Huber, U. Bauer, and R. Kwitt. A stable multi-scale kernel
+for topological machine learning. In <em>Proceedings of the IEEE Conference on
+Computer Vision and Pattern Recognition</em>, pages 4741-4748, 2015.</p>
+<p>P. Skraba. Persistent homology and machine learning. <em>Informatica</em>, 24(2),
+2018.</p>
+<p>C. Topaz, L. Ziegelmeier, and T. Halverson. Topological data analysis of
+biological aggregation models. PloS One, 10(5):e0126383, 2015.</p>
+<p>M. Zeppelzauer, B. Zielinski, M. Juda, and M. Seidl. Topological descriptors
+for 3d surface analysis. In <em>Computational Topology in Image Context: 6<sup>th</sup>
+International Workshop Proceedings</em>, pages 77-87, 2016.</p>
+<p>J. H. van Hateren and A. van der Schaaf. Independent component filters of
+natural images compared with simple cells in primary visual cortex. <em>Proc. R.
+Soc. Lond. B</em>, 265:359-366, 1998.</p>
+<p>A. Zomorodian. <em>Advances in Applied and Computational Topology</em>. American
+Mathematical Society, 2012.</p>
+<p>A. Zomorodian and G. Carlsson. Computing persistent homology. <em>Discrete Comput.
+Geom</em>., 33:249-274, 2005.</p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="container-fluid wm-page-content">
+      <p>
+        <a href="https://github.com/ds4m/ds4m.github.io/edit/master/docs/persistent-homology-tutorial.md"><i class="fa fa-github"></i>
+Edit on GitHub</a>
+      </p><p>Copyright 2020 Nathan Carter and several other contributors</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+
+</body>
+</html>

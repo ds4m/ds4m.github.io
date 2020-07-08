@@ -33,6 +33,8 @@
         
         var pageToc = [
           {title: "Chapter 10: Topological Data Analysis", url: "#_top", children: [
+              {title: "Persistent homology tutorial", url: "#persistent-homology-tutorial" },
+              {title: "Persistent homology code", url: "#persistent-homology-code" },
           ]},
         ];
 
@@ -79,7 +81,34 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><em>Digital resources supplementing the chapter</em></p>
 </blockquote>
 <hr />
-<p>None here yet; this page is a placeholder.  Check back later.</p>
+<h2 id="persistent-homology-tutorial">Persistent homology tutorial<a class="headerlink" href="#persistent-homology-tutorial" title="Permanent link">&para;</a></h2>
+<p><a href="../persistent-homology-tutorial/">Read our extensive tutorial on persistent homology.</a></p>
+<h2 id="persistent-homology-code">Persistent homology code<a class="headerlink" href="#persistent-homology-code" title="Permanent link">&para;</a></h2>
+<p>This repository contains scripts for using
+<a href="https://github.com/Ripser/ripser">Ripser</a> and 
+<a href="https://bitbucket.org/grey_narn/hera">Hera</a> with a Python interface. 
+Code was written by <a href="mailto:melissa_mcguirl@brown.edu">Melissa McGuirl</a>.</p>
+<p>You can run the scripts using Python on the command line, or inspect the code
+within the scripts to see how they are implemented.</p>
+<ol>
+<li>To run Ripser on a collection of distance matrices, run the script
+    <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/getBarCodes.py">getBarCodes.py</a>.</li>
+<li>To separate Ripser output by dimension
+    to input that is compatible with Hera, run the script
+    <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/separateRipser.py">separateRipser.py</a>.
+    IMPORTANT: That script assumes there are just dimension 0 and dimension 1
+    barcodes, but it could be adapted easily. </li>
+<li>To plot persistence diagrams, run the script
+    <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/plotpd.py">plotpd.py</a>.
+    (This script requires the output of <code>separateRipser.py</code>,
+    not the output of <code>getBarCodes.py</code>.)</li>
+<li>To compute distances between two barcodes, run the script
+    <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/computePDDists.py">computePDDists.py</a>.</li>
+</ol>
+<p>For help on using any of these scripts, run it with a <code>--h</code> switch, as in
+<code>python getBarCodes.py --h</code>.</p>
+<p>NOTE: The plan of the chapter authors is to update this code to instead use
+<a href="https://scikit-tda.org/">scikit-tda</a>.</p>
 <hr />
 
   <br>

@@ -18,7 +18,7 @@ Authors: [Henry Adams](https://www.math.colostate.edu/~adams/),
 This repository contains scripts for using
 [Ripser](https://github.com/Ripser/ripser) and 
 [Hera](https://bitbucket.org/grey_narn/hera) with a Python interface. 
-Code was written by [Melissa McGuirl](melissa_mcguirl@brown.edu).
+Code was written by [Melissa McGuirl](mailto:melissa_mcguirl@brown.edu).
 
 You can run the scripts using Python on the command line, or inspect the code
 within the scripts to see how they are implemented.
