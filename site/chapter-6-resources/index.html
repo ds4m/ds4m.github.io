@@ -34,6 +34,8 @@
         
         var pageToc = [
           {title: "Chapter 6: Operations Research", url: "#_top", children: [
+              {title: "Sample R code", url: "#sample-r-code" },
+              {title: "Code reference for random number generation", url: "#code-reference-for-random-number-generation" },
           ]},
         ];
 
@@ -89,7 +91,138 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><em>Digital resources supplementing the chapter</em></p>
 </blockquote>
 <hr />
-<p>None here yet; this page is a placeholder.  Check back later.</p>
+<h2 id="sample-r-code">Sample R code<a class="headerlink" href="#sample-r-code" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-6-resources/OR_Chapter_Figure7.R">R code for generating Figure 6.7 of the text</a></p>
+<p>Figure 6.7 shows two images:
+ 1. a histogram of 1000 randomly generated <span><span class="MathJax_Preview">U(0,1)</span><script type="math/tex">U(0,1)</script></span> values overlaid with the density of that distribution
+ 2. a histogram of <span><span class="MathJax_Preview">X=-\frac{\ln(1-U)}{\lambda}</span><script type="math/tex">X=-\frac{\ln(1-U)}{\lambda}</script></span> with <span><span class="MathJax_Preview">\lambda=5</span><script type="math/tex">\lambda=5</script></span> created from the first distribution, with the exponential distribution (with <span><span class="MathJax_Preview">\lambda=5</span><script type="math/tex">\lambda=5</script></span>) overlaid</p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-6-resources/OR_Chapter_Table1.R">R code for generating Table 6.1 of the text</a></p>
+<p>Table 6.1 illustrates several different probability distributions, including
+ * discrete uniform,
+ * binomial,
+ * geometric,
+ * Poisson,
+ * uniform,
+ * triangle,
+ * normal, and
+ * exponential.</p>
+<p>Each of those distributions can be accessed using code in a variety of
+languages, as shown below.  The reader may also be interested in the
+individual documentation for probability distributions in
+<a href="https://en.wikibooks.org/wiki/R_Programming/Probability_Distributions">R</a>,
+<a href="https://www.mathworks.com/help/stats/probability-distributions-1.html">MATLAB</a>
+<a href="https://docs.scipy.org/doc/scipy/reference/stats.html">Python</a>, or
+<a href="https://github.com/JuliaStats/Distributions.jl">Julia</a>.</p>
+<h2 id="code-reference-for-random-number-generation">Code reference for random number generation<a class="headerlink" href="#code-reference-for-random-number-generation" title="Permanent link">&para;</a></h2>
+<p>In each example below, <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> is the number of values to generate.</p>
+<p>All Python code assumes you have installed <a href="https://www.scipy.org/">SciPy</a>
+and have imported its statistics package with <code>import scipy.stats as stats</code>.</p>
+<p>All Julia code assumes you have installed
+<a href="https://github.com/JuliaStats/Distributions.jl">Distributions.jl</a>
+and have imported it with <code>using Distributions</code>.</p>
+<h3 id="discrete-uniform-distribution-on-aa1ldotsbaa1ldotsb">Discrete uniform distribution on <span><span class="MathJax_Preview">\{a,a+1,\ldots,b\}</span><script type="math/tex">\{a,a+1,\ldots,b\}</script></span><a class="headerlink" href="#discrete-uniform-distribution-on-aa1ldotsbaa1ldotsb" title="Permanent link">&para;</a></h3>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">sample</span><span class="p">(</span> <span class="n">a</span><span class="o">:</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">TRUE</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">randi</span><span class="p">(</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">randint</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">a</span><span class="o">:</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<h3 id="binomial-distribution-with-kk-trials-each-having-probability-pp">Binomial distribution with <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span> trials each having probability <span><span class="MathJax_Preview">p</span><script type="math/tex">p</script></span><a class="headerlink" href="#binomial-distribution-with-kk-trials-each-having-probability-pp" title="Permanent link">&para;</a></h3>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">rbinom</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">random</span><span class="p">(</span> <span class="s">&quot;Binomial&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">Binomial</span><span class="p">(</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="p">),</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<h3 id="geometric-distribution-with-success-probability-pp">Geometric distribution with success probability <span><span class="MathJax_Preview">p</span><script type="math/tex">p</script></span><a class="headerlink" href="#geometric-distribution-with-success-probability-pp" title="Permanent link">&para;</a></h3>
+<p>(specifically, the number of failures observed before a success was observed)</p>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">rgeom</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">random</span><span class="p">(</span> <span class="s">&quot;Geometric&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">Geometric</span><span class="p">(</span> <span class="n">p</span> <span class="p">),</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<h3 id="poisson-distribution-with-expected-rate-lambdalambda">Poisson distribution with expected rate <span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span><a class="headerlink" href="#poisson-distribution-with-expected-rate-lambdalambda" title="Permanent link">&para;</a></h3>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">rpois</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">lambda</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">random</span><span class="p">(</span> <span class="s">&quot;Poisson&quot;</span><span class="p">,</span> <span class="n">lambda</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span> <span class="k">lambda</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">Poisson</span><span class="p">(</span> <span class="n">lambda</span> <span class="p">),</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<h3 id="uniform-distribution-on-the-interval-abab">Uniform distribution on the interval <span><span class="MathJax_Preview">[a,b]</span><script type="math/tex">[a,b]</script></span><a class="headerlink" href="#uniform-distribution-on-the-interval-abab" title="Permanent link">&para;</a></h3>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">runif</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">random</span><span class="p">(</span> <span class="s">&quot;Uniform&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">Uniform</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">),</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<h3 id="triangular-distribution-on-the-interval-abab-with-mode-cc">Triangular distribution on the interval <span><span class="MathJax_Preview">[a,b]</span><script type="math/tex">[a,b]</script></span> with mode <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span><a class="headerlink" href="#triangular-distribution-on-the-interval-abab-with-mode-cc" title="Permanent link">&para;</a></h3>
+<p>In R:</p>
+<p>(This assumes you have done <code>install.packages('triangle')</code> and
+<code>library('triangle')</code>.)
+<div class="highlight"><pre><span></span><code><span class="nf">rtriangle</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB this distribution is not built in.</p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">triang</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="p">(</span><span class="n">c</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">),</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>Distributions.js does not contain this distribution.</p>
+<h3 id="normal-distribution-with-mean-mumu-and-standard-deviation-sigmasigma">Normal distribution with mean <span><span class="MathJax_Preview">\mu</span><script type="math/tex">\mu</script></span> and standard deviation <span><span class="MathJax_Preview">\sigma</span><script type="math/tex">\sigma</script></span><a class="headerlink" href="#normal-distribution-with-mean-mumu-and-standard-deviation-sigmasigma" title="Permanent link">&para;</a></h3>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">rnorm</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">random</span><span class="p">(</span> <span class="s">&quot;Normal&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">Normal</span><span class="p">(</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="p">),</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<h3 id="exponential-distribution-with-rate-lambdalambda">Exponential distribution with rate <span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span><a class="headerlink" href="#exponential-distribution-with-rate-lambdalambda" title="Permanent link">&para;</a></h3>
+<p>In R:
+<div class="highlight"><pre><span></span><code><span class="nf">rexp</span><span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">lambda</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In MATLAB:
+<div class="highlight"><pre><span></span><code><span class="n">random</span><span class="p">(</span> <span class="s">&quot;Exponential&quot;</span><span class="p">,</span> <span class="n">lambda</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Python:
+<div class="highlight"><pre><span></span><code><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span> <span class="k">lambda</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
+<p>In Julia:
+<div class="highlight"><pre><span></span><code><span class="n">rand</span><span class="p">(</span> <span class="n">Exponential</span><span class="p">(</span> <span class="n">lambda</span> <span class="p">),</span> <span class="n">n</span> <span class="p">)</span>
+</code></pre></div></p>
 <hr />
 
   <br>
