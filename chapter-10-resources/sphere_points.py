@@ -14,7 +14,7 @@ def main(npoints=500, ndim=3):
     vectors = np.random.randn(ndim, npoints)
     # Normalize each vector to have length one. These are our uniformly distributed points on the sphere.
     vectors /= np.linalg.norm(vectors, axis=0)
-    np.savetxt('point_clouds/sphere_points.txt', np.transpose(vectors), delimiter=', ')
+    np.savetxt('sphere_points.txt', np.transpose(vectors), delimiter=', ')
 
 if __name__ == "__main__":
     
