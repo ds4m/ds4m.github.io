@@ -1,0 +1,60 @@
+---
+title: "Clustering Example 6: Density-based Clustering of Iris Data"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+## Load necessary libraries.
+
+```{r message=FALSE, warning=FALSE}
+library(mosaic)
+library(dbscan)
+library(GGally)
+```
+
+## Load the famous dataset of Fisher's irises.
+
+```{r}
+data(iris)
+iris <- as.matrix(iris[,1:4])
+```
+
+## Find suitable `eps` parameter.
+
+We use a $k$-nearest-neighbors plot with $k$ equal to the number of dimensions plus 1, and look for the "knee" in the curve, which we mark with a red line below.
+
+```{r}
+kNNdistplot(iris, k = 5)
+abline(h=.5, col = "red", lty=2)
+```
+
+## Apply the DBSCAN algorithm with `eps=0.5`.
+
+The output includes the size of each cluster.
+
+```{r}
+res <- dbscan::dbscan(iris, eps = .5, minPts = 5)
+res
+```
+
+## Visualize clustering in a pair plot.
+
+The pair plot includes the four quantitative variables in the dataset and shows the clustering through the shapes of the data points with in each plot (circle, square, triangle).
+
+```{r}
+data(iris)
+ggpairs(iris, columns = 1:4,
+        mapping = ggplot2::aes(alpha = 0.3, shape = factor(res$cluster)),
+        columnLabels = c("Sepal Length", "Sepal Width", "Petal Length", "Petal Width"),
+        upper=list(continuous="points"))  
+```

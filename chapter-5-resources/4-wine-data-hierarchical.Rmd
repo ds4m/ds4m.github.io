@@ -1,0 +1,94 @@
+---
+title: "Clustering Example 4: Hierarchical Clustering of Wine Data"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+## Load necessary libraries.
+
+```{r message=FALSE, warning=FALSE}
+library(mosaic)
+library(cluster)
+```
+
+This requires you to have access to the `winedata.txt` file.  It is available in the book's GitHub repository at the following URL.
+
+[https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt)
+
+If you run this R code, place the data file in the same folder as the code file.
+
+```{r}
+winedata <- read.csv("winedata.txt")
+```
+
+For summaries of the variables in the wine data, see the Clustering Example 3 file in the same folder as this one.
+
+## Compute a distance matrix for the wine data.
+
+```{r}
+wine.dist.scale <- dist(scale(winedata[, -c(1)]))
+```
+
+## Apply hierarchical clustering with single linkage.
+
+```{r}
+hcsingle <- hclust(wine.dist.scale, method = "single") 
+list(hcsingle) # reminds you of properties of the solution, if desired
+```
+
+## Plot the resulting dendrogram.
+
+```{r}
+plot(hcsingle, cex = 0.7)
+```
+
+## Extract a single clusering solution from the dendrogram.
+
+Here we specify the height $h$ that determines the clustering.  We display just the number of observations in each cluster.
+
+```{r}
+singleSol <- (cutree(hcsingle, h = 2.25)) #cluster labels are numeric, h= height
+summary(as.factor(singleSol)) #as factor to get table
+```
+
+## Apply hierarchical clustering with complete linkage and plot dendrogram.
+
+```{r}
+hccomp <- hclust(wine.dist.scale, method = "complete") 
+plot(hccomp, cex = 0.7)
+```
+
+## Extract a single clusering solution from the dendrogram.
+
+Here we specify the number $k$ of clusters that we desire in the solution.  We display just the number of observations in each cluster.
+
+```{r}
+compSol <- (cutree(hccomp, k= 4)) #k= # clusters, k=3 also reasonable
+summary(as.factor(compSol)) #as factor to get table
+```
+
+## Apply hierarchical clustering with Ward's method and plot dendrogram.
+
+```{r}
+hcward <- hclust(wine.dist.scale, method = "ward.D") 
+plot(hcward, cex = 0.7)
+```
+
+## Extract a single clusering solution from the dendrogram.
+
+Here we specify the number $k$ of clusters that we desire in the solution.  We display just the number of observations in each cluster.
+
+```{r}
+wardSol <- (cutree(hcward, k= 3)) #k= # clusters, k=3 also reasonable
+summary(as.factor(wardSol)) #as factor to get table
+```

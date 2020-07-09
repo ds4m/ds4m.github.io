@@ -1,0 +1,266 @@
+---
+title: "Clustering Example 9: College Scorecard and $k$-means Clustering"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+## Load necessary libraries.
+
+```{r message=FALSE, warning=FALSE}
+library(mosaic)
+library(cluster)
+```
+
+This requires you to have access to the `college.rda` file.  It is available in the book's GitHub repository at the following URL.
+
+[https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/college.rda](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/college.rda)
+
+If you run this R code, place the data file in the same folder as the code file.
+
+```{r}
+load("college.rda")
+```
+
+The data was originally retrieved from [https://collegescorecard.ed.gov/data/](https://collegescorecard.ed.gov/data/) and a corresponding data dictionary can be found at [https://collegescorecard.ed.gov/data/documentation/](https://collegescorecard.ed.gov/data/documentation/).  We summarize a portion of the data dictionary here for convenience.
+
+| Code | Control level |
+|------|---------------|
+| 1	| Public |
+| 2	| Private nonprofit |
+| 3	| Private for-profit |
+
+
+| Code | Region |
+|------|--------|
+| 0	| U.S. Service Schools - none in this subset |
+| 1	| New England (CT, ME, MA, NH, RI, VT) |
+| 2	| Mid East (DE, DC, MD, NJ, NY, PA) |
+| 3	| Great Lakes (IL, IN, MI, OH, WI) |
+| 4	| Plains (IA, KS, MN, MO, NE, ND, SD) |
+| 5	| Southeast (AL, AR, FL, GA, KY, LA, MS, NC, SC, TN, VA, WV) |
+| 6	| Southwest (AZ, NM, OK, TX) |
+| 7	| Rocky Mountains (CO, ID, MT, UT, WY) |
+| 8	| Far West (AK, CA, HI, NV, OR, WA) |
+| 9	| Outlying Areas (AS, FM, GU, MH, MP, PR, PW, VI) |
+
+| Code | Locale |
+|------|--------|
+| 11	| City: Large |
+| 12	| City: Midsize |
+| 13	| City: Small |
+| 21	| Suburb: Large |
+| 22	| Suburb: Midsize |
+| 23	| Suburb: Small |
+| 31	| Town: Fringe |
+| 32	| Town: Distant |
+| 33	| Town: Remote |
+| 41	| Rural: Fringe |
+| 42	| Rural: Distant |
+| 43	| Rural: Remote |
+
+## Select relevant variables and convert their data types.
+
+```{r}
+data <- select(CollegeScorecardMostRecent, INSTNM, STABBR, CONTROL, REGION,
+               LOCALE, ADM_RATE, ACTCMMID, SAT_AVG, UGDS, TUITFTE, AVGFACSAL,
+               PCTPELL, PFTFAC, COMP_ORIG_YR4_RT, COMP_ORIG_YR6_RT,
+               PAR_ED_PCT_1STGEN, GRAD_DEBT_MDN, AGE_ENTRY,MD_FAMINC,
+               MEDIAN_HH_INC)
+
+data <- mutate(data,
+               COMP_ORIG_YR4_RT = as.numeric(COMP_ORIG_YR4_RT),
+               COMP_ORIG_YR6_RT = as.numeric(COMP_ORIG_YR6_RT),
+               PAR_ED_PCT_1STGEN = as.numeric(PAR_ED_PCT_1STGEN),
+               GRAD_DEBT_MDN = as.numeric(GRAD_DEBT_MDN),
+               AGE_ENTRY = as.numeric(AGE_ENTRY),
+               MD_FAMINC = as.numeric(MD_FAMINC),
+               MEDIAN_HH_INC = as.numeric(MEDIAN_HH_INC))
+```
+
+## Remove observations with missing values (NAs).
+
+Also print summary information for the dataset; this includes showing how many values in each column are missing (NA's).
+
+```{r}
+complete <- select(data, -INSTNM, -STABBR, -CONTROL, -REGION, -LOCALE,
+                   -MEDIAN_HH_INC, -ACTCMMID, -ADM_RATE, -SAT_AVG, -PFTFAC,
+                   -AVGFACSAL)
+summary(complete)
+complete <- complete[complete.cases(complete),]
+glimpse(complete)
+```
+
+## Run $k$-means clustering for $k=1$ to $k=20$.
+
+We plot the within-groups sum of squares for each run, so that we can assess which $k$ value may be best.  Note the choice of a random number seed, for reproducibility.
+
+```{r}
+set.seed(240)
+wss <- rep(0, 20) 
+for (i in 1:20) {
+  wss[i] <- sum(kmeans(scale(complete), centers = i)$withinss)
+}                   
+plot(1:20, wss, type = "b",
+     xlab = "Number of clusters", ylab = "Within groups sum of squares")
+```
+
+## Run $k$-means with the chosen value of $k=4$.
+
+And print the results, which include cluster centroids, the clustering partition as a vector, and the within-groups sum of squares.
+
+```{r}
+set.seed(304)
+Ksol1 <- kmeans(scale(complete), centers = 4) #centers is the # of clusters
+list(Ksol1)
+```
+
+## Create corresponding silhouette plot.
+
+```{r}
+kmeansSil <- silhouette(Ksol1$cluster, dist(scale(complete)))
+silsum <- summary(kmeansSil)
+silsum
+plot(kmeansSil)
+```
+
+Individual lines in the silhouette plot are not readable with that many observations, but we can still benefit from the output shown on the right. 
+
+## Report average silhouette width more precisely.
+
+```{r}
+silsum$avg.width
+```
+
+## Compute average silhouette width for all possible values of $k$.
+
+Thus $k$ ranges from 2 to $n-1$ (where $n$ is the number of observations, here 101) and we report summary statistics for the collection of silhouette widths.
+
+```{r}
+set.seed(304)
+n <- 101
+mydist <- dist(scale(complete))
+avgwidths <- rep(0, 99)
+
+for (i in 2:(n-1)) {
+  set.seed(304)
+  Ksol <- kmeans(scale(complete), centers = i) #centers is the # of clusters
+  kmeansSil <- silhouette(Ksol$cluster, mydist)
+  avgwidths[i-1] <- summary(kmeansSil)$avg.width
+}
+
+summary(avgwidths)
+```
+
+## Plot the $k=4$ solution in principal component space.
+
+However, because there are so many observations, we can gain very little benefit from such a plot.
+
+There is, however, one outlier clearly shown at about $(4,-15)$.
+
+```{r}
+set.seed(1)
+csPCAs <- princomp(complete, cor = TRUE)
+plot(csPCAs$scores[, 1:2], type = "n",
+     xlab = "PC1", ylab = "PC2", main="K-means Four Cluster Solution")
+text(csPCAs$scores[, 1:2], labels = Ksol1$cluster, cex = 0.7)
+
+summary(csPCAs)
+```
+
+## Examine statistics for some key variables by cluster.
+
+```{r}
+favstats(GRAD_DEBT_MDN ~ Ksol1$cluster, data = complete)
+favstats(TUITFTE ~ Ksol1$cluster, data = complete)
+```
+
+## Compare clustering solution to some key variables.
+
+We need a copy of the data with just the columns that make it possible to compare with our clustering solution.  Create that data and do the comparison.
+
+```{r}
+for_comparison <- select(data, -STABBR, -MEDIAN_HH_INC, -ACTCMMID, -ADM_RATE, -SAT_AVG,
+                     -PFTFAC, -AVGFACSAL)
+for_comparison <- for_comparison[complete.cases(for_comparison),]
+tally(for_comparison$CONTROL ~ Ksol1$cluster)
+tally(for_comparison$REGION ~ Ksol1$cluster)
+tally(for_comparison$LOCALE ~ Ksol1$cluster)
+```
+
+## To try hierarchical clustering, we need a distance matrix.
+
+```{r}
+cs.dist.scale <- dist(scale(complete))
+```
+
+## Perform hierarchical clustering with single linkage.
+
+```{r}
+hcsingle <- hclust(cs.dist.scale, method = "single") 
+list(hcsingle) # reminds you of properties of the solution, if desired
+```
+
+## Plot the corresponding dendrogram.
+
+```{r}
+plot(hcsingle, cex = 0.7)
+```
+
+Observation 3593 is a major outlier. Not much else beneficial to be gained here.
+
+```{r}
+for_comparison[3593,1:4]
+```
+
+## Perform hierarchical clustering with complete linkage.
+
+```{r}
+hccomp <- hclust(cs.dist.scale, method = "complete") 
+plot(hccomp, cex = 0.7)
+```
+
+Observation 3593 is still a major outlier.
+
+## Perform hierarchical clustering with Ward's method.
+
+```{r}
+hcward <- hclust(cs.dist.scale, method = "ward.D") 
+plot(hcward, cex = 0.3, labels = FALSE)
+wardSol <- (cutree(hcward, k= 5))
+summary(as.factor(wardSol)) #as factor to get table
+```
+
+## Compute and report average silhouette width more precisely.
+
+```{r}
+WardSil <- silhouette(wardSol, dist(scale(complete)))
+silsum2 <- summary(WardSil)
+silsum2
+silsum2$avg.width
+```
+
+## Compare clustering solution to some key variables.
+
+(The `for_comparison` data frame was defined earlier.)
+
+```{r}
+tally(for_comparison$CONTROL ~ wardSol)
+tally(for_comparison$REGION ~ wardSol)
+tally(for_comparison$LOCALE ~ wardSol)
+```
+
+## Compare clustering solutions built using $k$-means and Ward's method.
+
+```{r}
+tally(wardSol ~ Ksol1$cluster)
+```

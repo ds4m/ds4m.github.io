@@ -1,0 +1,92 @@
+---
+title: "Clustering Example 5: Model-based Clustering of Wine Data"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+## Load necessary libraries.
+
+```{r message=FALSE, warning=FALSE}
+library(mosaic)
+library(mclust)
+library(readr)
+```
+
+This requires you to have access to the `winedata.txt` file.  It is available in the book's GitHub repository at the following URL.
+
+[https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt)
+
+If you run this R code, place the data file in the same folder as the code file.
+
+```{r}
+winedata <- read.csv("winedata.txt")
+```
+
+For summaries of the variables in the wine data, see the Clustering Example 3 file in the same folder as this one.
+
+## Plot BIC for various model-based methods.
+
+```{r}
+mclustsol <- mclustBIC(winedata[, -1])
+plot(mclustsol)
+```
+
+## Compare two mixture models for a small range of $k$ values.
+
+This requires you to have access to the `mclustBICs.csv` file.  It is available in the book's GitHub repository at the following URL.
+
+[https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/mclustBICs.csv](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/mclustBICs.csv)
+
+If you run this R code, place the data file in the same folder as the code file.
+
+```{r}
+mclustBICs <- read_csv("mclustBICs.csv")
+mclustBICs2 <- mutate(mclustBICs, Model = factor(Model))
+mclustBICs3 <- filter(mclustBICs2, Model == "EVE" | Model == "VVE", k < 6, k > 1.5)
+
+gf_point(BIC ~ k, data = mclustBICs3, shape = ~ Model) %>%
+  gf_labs(title = "BIC Comparison of EVE and VVE Mixture Models",
+          x = "Number of Components") + geom_line()
+summary(mclustsol)
+```
+
+## Fit Gaussian finite mixture models to the data.
+
+```{r}
+mod1 <- Mclust(winedata[, -1], x = mclustsol)
+summary(mod1, parameters = TRUE)
+```
+
+## Plotting with so many variables does not lead to readable results.
+
+```{r}
+plot(mod1, what = "classification")
+```
+
+## Plot the clustering from the VVE model with $k=3$, using principal component space.
+
+```{r}
+set.seed(1)
+winePCAs <- princomp(winedata[, -c(1)], cor = TRUE)
+plot(winePCAs$scores[, 1:2], type = "n", 
+     xlab = "Principal Component 1", ylab = "Principal Component 2", 
+     main="MClust VVE Three-Cluster Solution")
+text(winePCAs$scores[, 1:2], labels = mod1$classification, cex = 0.7)
+```
+
+## Compare that solution to the original wine cultivars.
+
+```{r}
+tally(winedata$Cultivar ~ mod1$classification)
+```
+

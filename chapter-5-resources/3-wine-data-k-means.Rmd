@@ -1,0 +1,147 @@
+---
+title: "Clustering Example 3: $k$-means Applied to Wine Data"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+## Load necessary libraries.
+
+```{r message=FALSE, warning=FALSE}
+library(mosaic)
+library(cluster)
+```
+
+## Load wine dataset.
+
+This requires you to have access to the `winedata.txt` file.  It is available in the book's GitHub repository at the following URL.
+
+[https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt)
+
+If you run this R code, place the data file in the same folder as the code file.
+
+```{r}
+winedata <- read.csv("winedata.txt")
+```
+
+## See column names, data types, and some values in each column.
+
+```{r}
+glimpse(winedata)
+```
+
+## See summary statistics for all columns in wine data.
+
+```{r}
+favstats(~ Alcohol, data = winedata)
+favstats(~ MalicAcid, data = winedata)
+favstats(~ Ash, data = winedata)
+favstats(~ AlcalinityofAsh, data = winedata)
+favstats(~ Magnesium, data = winedata)
+favstats(~ TotalPhenols, data = winedata)
+favstats(~ Flavanoids, data = winedata)
+favstats(~ NonflavanoidPhenols, data = winedata)
+favstats(~ Proanthocyanins, data = winedata)
+favstats(~ ColorIntensity, data = winedata)
+favstats(~ Hue, data = winedata)
+favstats(~ ODDilutedWines, data = winedata)
+favstats(~ Proline, data = winedata)
+```
+
+## Run $k$-means clustering for $k=1$ to $k=12$.
+
+We plot the within-groups sum of squares for each run, so that we can assess which $k$ value may be best.  Note the choice of a random number seed, for reproducibility.
+
+```{r}
+set.seed(240)
+wss <- rep(0, 12) #creates 12 copies of 0 to create an empty vector
+for(i in 1:12) {
+  wss[i] <- sum(kmeans(scale(winedata[, -c(1)]), centers = i)$withinss)
+}
+plot(1:12, wss, type = "b",
+     xlab = "Number of clusters", ylab = "Within groups sum of squares")
+```
+
+## Run $k$-means with the chosen value of $k=3$.
+
+And print the results, which include cluster centroids, the clustering partition as a vector, and the within-groups sum of squares.
+
+```{r}
+set.seed(304)
+Ksol1 <- kmeans(scale(winedata[, -c(1)]), centers = 3) #centers is the # of clusters
+list(Ksol1) #so you can see what it gives you
+```
+
+## Create corresponding silhouette plot.
+
+```{r}
+kmeansSil <- silhouette(Ksol1$cluster, dist(scale(winedata[, -c(1)])))
+silsum <- summary(kmeansSil)
+plot(kmeansSil, col = "black")
+```
+
+## Report average silhouette width more precisely.
+
+```{r}
+summary(kmeansSil)$avg.width
+```
+
+## Compute average silhouette width for all possible values of $k$.
+
+Thus $k$ ranges from 2 to $n-1$ (where $n$ is the number of observations, here 178) and we report summary statistics for the collection of silhouette widths.
+
+```{r}
+n <- 178
+mydist <- dist(scale(winedata[, -c(1)]))
+avgwidths <- rep(0, 176)
+
+for (i in 2:(n-1)) {
+  Ksol <- kmeans(scale(winedata[, -c(1)]), centers = i) #centers is the # of clusters
+  kmeansSil <- silhouette(Ksol$cluster, mydist)
+  avgwidths[i-1] <- summary(kmeansSil)$avg.width
+}
+
+summary(avgwidths)
+```
+
+## Plot the $k=3$ solution in principal component space.
+
+```{r}
+set.seed(1)
+winePCAs <- princomp(winedata[, -c(1)], cor = TRUE)
+plot(winePCAs$scores[, 1:2], type = "n",
+     xlab = "Principal Component 1", ylab = "Principal Component 2",
+     main="K-means Three-Cluster Solution")
+text(winePCAs$scores[, 1:2], labels = Ksol1$cluster, cex = 0.7)
+```
+
+## Compare found clusters to original wine cultivars.
+
+```{r}
+tally(winedata$Cultivar ~ Ksol1$cluster)
+```
+
+## Perform $k$-means clustering with $k=4$.
+
+```{r}
+set.seed(304)
+Ksol2 <- kmeans(scale(winedata[, -c(1)]), centers = 4) #centers is the # of clusters
+list(Ksol2)
+```
+
+## Compare $k=4$ solution to original wine cultivars.
+
+```{r}
+tally(Ksol1$cluster ~ Ksol2$cluster)
+```
+
+

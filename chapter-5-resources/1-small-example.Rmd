@@ -1,0 +1,68 @@
+---
+title: "Clustering Example 1: Five Data Points"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+## Load necessary library.
+
+```{r message=FALSE, warning=FALSE}
+library(ggformula)
+```
+
+## Generate 5 data points and graph them.
+
+```{r}
+x <- c(4,2,4.5,3,1)
+y <- c(5.5,2,6,7,3)
+Label <- c("(4, 5.5)", "(2, 2)", "(4.5, 6)", "(3, 7)", "(1, 3)")
+mydata <- data.frame(x, y, Label)
+ggplot(mydata,
+       aes(x=x, y=y, label=Label))+
+       xlim(0.75, 4.75)+ylim(1.5, 7.5)+geom_point()+
+       geom_text(aes(label=Label),hjust = 0.5,vjust = -0.75)
+```
+
+## Convert to a data frame and compute the distance matrix.
+
+```{r}
+mydata <- data.frame(x,y)
+mydata
+round(dist(mydata),2)
+```
+
+## Perform hierarchical clustering with single linkage.
+
+```{r}
+plot(hclust(dist(mydata), method = "single"))
+```
+
+## Perform hierarchical clustering with complete linkage.
+
+The clusters are the same as in the previous case, but there are minor changes to the heights of the bars in the dendrogram.
+
+```{r}
+plot(hclust(dist(mydata), method = "complete"))
+```
+
+## Perform hierarchical clustering with average linkage.
+
+```{r}
+plot(hclust(dist(mydata), method = "average"))
+```
+
+## Perform hierarchical clustering with Ward's method.
+
+```{r}
+plot(hclust(dist(mydata), method = "ward.D"))
+```

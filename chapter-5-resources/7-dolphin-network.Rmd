@@ -1,0 +1,154 @@
+---
+title: "Clustering Example 7: Network Clustering of Dolphin Data"
+author: "Amy Wagaman, Nathan Carter"
+date: "July 2020"
+output: 
+  pdf_document:
+    fig_height: 5
+    fig_width: 5
+  html_document:
+    fig_height: 5
+    fig_width: 5
+  word_document:
+    fig_height: 5
+    fig_width: 5
+---
+
+## Load necessary libraries.
+
+```{r message=FALSE, warning=FALSE}
+library(igraph)
+library(ape)
+```
+
+This requires you to have access to the `dolphins.gml` file.  It is available in the book's GitHub repository at the following URL.
+
+[https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/dolphins.gml](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/dolphins.gml)
+
+If you run this R code, place the data file in the same folder as the code file.
+
+How many vertices and edges does the graph have?
+
+```{r}
+g <- read_graph("dolphins.gml", format = "gml")
+vcount(g)
+ecount(g)
+```
+
+## Plot the graph
+
+Some layout algorithms use randomness, so we set a seed, for reproducibility.
+
+```{r}
+set.seed(540)
+mylayout3 <- layout_(g, with_gem())
+igraph.options(vertex.size=5, vertex.color = "NA", vertex.shape = "circle",
+               vertex.label.cex = 0.5, vertex.label.dist = 1.3)
+plot(g, layout = mylayout3)
+```
+
+## We can ask questions about network density.
+
+```{r}
+degree(g)
+summary(degree(g))
+```
+
+## Apply the `fastgreedy.community` clustering algorithm.
+
+```{r}
+set.seed(240)
+fg1 <- fastgreedy.community(g)
+length(fg1) # How many clusters?
+sizes(fg1) # How large was each cluster?
+membership(fg1) # the familiar clustering vector
+```
+
+## Plot the network again, with clusters shown.
+
+```{r}
+plot(fg1, g)
+```
+
+## Measure the clustering quality.
+
+The `fastgreedy.community` algorithm seeks to maximize modularity, which is a measure of how separated different vertex types are from one another.  We can ask for the modularity of the result.
+
+```{r}
+modularity(g, fg1$membership)
+```
+
+## Plot the corresponding dendrogram.
+
+Because the `fastgreedy.community` algorithm is hierarchical, it also produces a dendrogram.
+
+```{r}
+dendPlot(fg1, mode="phylo", palette = gray(c(0, 0.5, 0, 0.5)),
+         cex = 0.5, label.offset = 0.1)
+```
+
+## Improve the clustering plot.
+
+The plot that moves vertices near to one another is a bit busy and messy.  Let's assign vertex shapes to indicate the clustering solution and plot without the colored blobs shown above.
+
+```{r}
+shapes <- rep("circle", 62)
+colors <- rep("NA", 62)
+
+for (i in 1:62) {
+  if (fg1$membership[i]==2) { shapes[i] = "square" }
+  if (fg1$membership[i]==4) { shapes[i] = "square" }
+  if (fg1$membership[i]==1) { colors[i] = "gray"   }
+  if (fg1$membership[i]==2) { colors[i] = "gray"   }
+}
+
+igraph.options(vertex.size=5, vertex.color = colors, vertex.label.cex = 0.5,
+               vertex.label.dist = 1.3, vertex.shape = shapes)
+plot(g, layout = mylayout3)
+```
+
+## Apply the `leading.eigenvector.community` clustering algorithm.
+
+```{r}
+sp1 <- leading.eigenvector.community(g)
+length(sp1) # How many clusters?
+sizes(sp1) # How large was each cluster?
+membership(sp1) # the familiar clustering vector
+```
+
+## Plot the network again, with clusters shown.
+
+```{r}
+plot(sp1, g)
+```
+
+## Measure the clustering quality.
+
+See comments above about the `modularity` metric.
+
+```{r}
+modularity(g, sp1$membership)
+```
+
+## Apply the `walktrap.community` clustering algorithm.
+
+```{r}
+wt1 <- walktrap.community(g)
+length(wt1) # How many clusters?
+sizes(wt1) # How large was each cluster?
+membership(wt1) # the familiar clustering vector
+```
+
+## Plot the network again, with clusters shown.
+
+```{r}
+plot(wt1, g)
+```
+
+## Measure the clustering quality.
+
+See comments above about the `modularity` metric.
+
+```{r}
+modularity(g, wt1$membership)
+```
