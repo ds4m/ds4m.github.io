@@ -34,6 +34,15 @@
         
         var pageToc = [
           {title: "Chapter 5: Clustering", url: "#_top", children: [
+              {title: "Small clustering example", url: "#small-clustering-example" },
+              {title: "Iris data visualization", url: "#iris-data-visualization" },
+              {title: "Wine data, k-means clustering", url: "#wine-data-k-means-clustering" },
+              {title: "Wine data, hierarchical clustering", url: "#wine-data-hierarchical-clustering" },
+              {title: "Wine data, model-based clustering", url: "#wine-data-model-based-clustering" },
+              {title: "Wine data, density-based clustering", url: "#wine-data-density-based-clustering" },
+              {title: "Clustering on dolphin network data", url: "#clustering-on-dolphin-network-data" },
+              {title: "k-means clustering with bad initial centroids", url: "#k-means-clustering-with-bad-initial-centroids" },
+              {title: "College Scorecard, two types of clustering compared", url: "#college-scorecard-two-types-of-clustering-compared" },
           ]},
         ];
 
@@ -88,7 +97,56 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><em>Digital resources supplementing the chapter</em></p>
 </blockquote>
 <hr />
-<p>None here yet; this page is a placeholder.  Check back later.</p>
+<p>Much of the R code shown in the chapter is available for viewing and
+downloading from this repository, as well as the necessary related data files.</p>
+<h2 id="small-clustering-example">Small clustering example<a class="headerlink" href="#small-clustering-example" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/1-small-example.Rmd">View R Markdown file</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/1-small-example.pdf">View generated PDF</a></p>
+<h2 id="iris-data-visualization">Iris data visualization<a class="headerlink" href="#iris-data-visualization" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/2-iris-data-visualization.Rmd">View R Markdown file</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/2-iris-data-visualization.pdf">View generated PDF</a></p>
+<h2 id="wine-data-k-means-clustering">Wine data, <em>k</em>-means clustering<a class="headerlink" href="#wine-data-k-means-clustering" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/3-wine-data-k-means.Rmd">View R Markdown file</a></p>
+<p>To run that R Markdown file on your own machine, you would need the associated
+data file in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt">You can get the data file here.</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/3-wine-data-k-means.pdf">View generated PDF</a></p>
+<h2 id="wine-data-hierarchical-clustering">Wine data, hierarchical clustering<a class="headerlink" href="#wine-data-hierarchical-clustering" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/4-wine-data-hierarchical.Rmd">View R Markdown file</a></p>
+<p>To run that R Markdown file on your own machine, you would need the associated
+data file in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt">You can get the data file here.</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/4-wine-data-hierarchical.pdf">View generated PDF</a></p>
+<h2 id="wine-data-model-based-clustering">Wine data, model-based clustering<a class="headerlink" href="#wine-data-model-based-clustering" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/5-wine-data-model-based.Rmd">View R Markdown file</a></p>
+<p>To run that R Markdown file on your own machine, you would need the associated
+data file in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt">You can get the data file here.</a>
+You will also need a file containing BIC values, which you should also place
+in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/mclustBICs.csv">You can get that second file here.</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/5-wine-data-model-based.pdf">View generated PDF</a></p>
+<h2 id="wine-data-density-based-clustering">Wine data, density-based clustering<a class="headerlink" href="#wine-data-density-based-clustering" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/6-wine-data-density-based.Rmd">View R Markdown file</a></p>
+<p>To run that R Markdown file on your own machine, you would need the associated
+data file in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/winedata.txt">You can get the data file here.</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/6-wine-data-density-based.pdf">View generated PDF</a></p>
+<h2 id="clustering-on-dolphin-network-data">Clustering on dolphin network data<a class="headerlink" href="#clustering-on-dolphin-network-data" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/7-dolphin-network.Rmd">View R Markdown file</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/7-dolphin-network.pdf">View generated PDF</a></p>
+<p>To run that R Markdown file on your own machine, you would need the associated
+data file in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/dolphins.gml">You can get the data file here.</a></p>
+<h2 id="k-means-clustering-with-bad-initial-centroids"><em>k</em>-means clustering with bad initial centroids<a class="headerlink" href="#k-means-clustering-with-bad-initial-centroids" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/8-k-means-bad-start.Rmd">View R Markdown file</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/8-k-means-bad-start.pdf">View generated PDF</a></p>
+<h2 id="college-scorecard-two-types-of-clustering-compared">College Scorecard, two types of clustering compared<a class="headerlink" href="#college-scorecard-two-types-of-clustering-compared" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/9-college-scorecard.Rmd">View R Markdown file</a></p>
+<p>To run that R Markdown file on your own machine, you would need the associated
+data file in the same folder as the <code>.Rmd</code> file.
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/college.rda">You can get the data file here.</a></p>
+<p><a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-5-resources/9-college-scorecard.pdf">View generated PDF</a></p>
 <hr />
 
   <br>
