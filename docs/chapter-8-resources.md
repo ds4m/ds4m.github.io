@@ -9,6 +9,20 @@ Authors: [Mahesh Agarwal](https://umdearborn.edu/users/mkagarwa),
 
 ---
 
-None here yet; this page is a placeholder.  Check back later.
+## Boston Housing Dataset Example
+
+The chapter includes code that loads a built-in
+[scikit-learn](https://scikit-learn.org/stable/) dataset of Boston housing
+prices from 1978 and fits a linear model using appropriate train/test
+splitting and simple feature selection.  (The dataset's origins are documented
+[here](https://scikit-learn.org/stable/datasets/index.html#boston-house-prices-dataset).)
+
+Run Jupyter notebook online using Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ds4m/ds4m.github.io/blob/master/chapter-8-resources/boston-dataset-example.ipynb)
+
+[View Jupyter notebook on GitHub](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-8-resources/boston-dataset-example.ipynb)
+
+[View generated PDF](https://github.com/ds4m/ds4m.github.io/tree/master/chapter-8-resources/boston-dataset-example.pdf)
 
 ---
