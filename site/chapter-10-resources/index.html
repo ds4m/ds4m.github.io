@@ -34,7 +34,7 @@
         
         var pageToc = [
           {title: "Chapter 10: Topological Data Analysis", url: "#_top", children: [
-              {title: "Persistent homology tutorial", url: "#persistent-homology-tutorial" },
+              {title: "Persistent homology tutorial (4 parts)", url: "#persistent-homology-tutorial-4-parts" },
               {title: "Persistent homology code", url: "#persistent-homology-code" },
           ]},
         ];
@@ -82,12 +82,17 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><em>Digital resources supplementing the chapter</em></p>
 </blockquote>
 <hr />
-<h2 id="persistent-homology-tutorial">Persistent homology tutorial<a class="headerlink" href="#persistent-homology-tutorial" title="Permanent link">&para;</a></h2>
-<p><a href="../persistent-homology-tutorial/">Read our extensive tutorial on persistent homology.</a></p>
+<h2 id="persistent-homology-tutorial-4-parts">Persistent homology tutorial (4 parts)<a class="headerlink" href="#persistent-homology-tutorial-4-parts" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="../persistent-homology-tutorial-1/">Computing persistent homology online</a></li>
+<li><a href="../persistent-homology-tutorial-2/">Exercises</a></li>
+<li><a href="../persistent-homology-tutorial-3/">Computing persistent homology on your machine</a></li>
+<li><a href="../persistent-homology-tutorial-4/">Topological feature vectors (and bibliography)</a></li>
+</ol>
 <h2 id="persistent-homology-code">Persistent homology code<a class="headerlink" href="#persistent-homology-code" title="Permanent link">&para;</a></h2>
 <p>This repository contains scripts for using
-<a href="https://github.com/Ripser/ripser">Ripser</a> and 
-<a href="https://bitbucket.org/grey_narn/hera">Hera</a> with a Python interface. 
+<a href="https://github.com/Ripser/ripser">Ripser</a> and
+<a href="https://bitbucket.org/grey_narn/hera">Hera</a> with a Python interface.
 Code was written by <a href="mailto:melissa_mcguirl@brown.edu">Melissa McGuirl</a>.</p>
 <p>You can run the scripts using Python on the command line, or inspect the code
 within the scripts to see how they are implemented.</p>
@@ -98,7 +103,7 @@ within the scripts to see how they are implemented.</p>
     to input that is compatible with Hera, run the script
     <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/separateRipser.py">separateRipser.py</a>.
     IMPORTANT: That script assumes there are just dimension 0 and dimension 1
-    barcodes, but it could be adapted easily. </li>
+    barcodes, but it could be adapted easily.</li>
 <li>To plot persistence diagrams, run the script
     <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/plotpd.py">plotpd.py</a>.
     (This script requires the output of <code>separateRipser.py</code>,

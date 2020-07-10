@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="Nathan Carter">
+    <link rel="canonical" href="https://ds4m.github.io/persistent-homology-tutorial-1/">
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Persistent Homology Tutorial 1 of 4 - Data Science for Mathematicians</title>
+    <link href="../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/highlight.css">
+    <link href="../css/code_styles.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Persistent Homology Tutorial 1 of 4", url: "#_top", children: [
+              {title: "Introduction", url: "#introduction" },
+              {title: "Persistent homology", url: "#persistent-homology" },
+              {title: "Ripser in your browser - synthetic examples", url: "#ripser-in-your-browser-synthetic-examples" },
+          ]},
+        ];
+
+    </script>
+    <script src="../js/base.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="persistent-homology-tutorial-1-of-4">Persistent Homology Tutorial 1 of 4<a class="headerlink" href="#persistent-homology-tutorial-1-of-4" title="Permanent link">&para;</a></h1>
+<p>(See also <a href="../persistent-homology-tutorial-2/">Part 2</a>,
+<a href="../persistent-homology-tutorial-3/">Part 3</a>, and
+<a href="../persistent-homology-tutorial-4/">Part 4</a>.)</p>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>This tutorial accompanies the chapter on Toplogical Data Analysis in the book
+<a href="https://ds4m.github.io">Data Science for Mathematicians</a>.</p>
+<p>The tutorial uses code from <a href="https://github.com/Ripser/ripser">Ripser</a>
+by Ulrich Bauer (Bauer, 2015) and a variety of other places,
+referenced throughout the text.</p>
+<p>This first part of this tutorial (Persistent homology)
+requires no software download.
+However, you do need to download some datasets, which you can get from
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/">this folder in the book's GitHub repository</a>.</p>
+<h2 id="persistent-homology">Persistent homology<a class="headerlink" href="#persistent-homology" title="Permanent link">&para;</a></h2>
+<p>You can get the PDF slides for Henry's introduction to persistent homology
+<a href="https://www.math.colostate.edu/~adams/talks/AnIntroductionToAppliedTopology_Slides_3parts.pdf">here</a>.</p>
+<p>We will be using <a href="https://github.com/Ripser/ripser">Ripser</a> in this tutorial.
+Some slides about how Ripser works are available
+<a href="http://ulrich-bauer.org/ripser-talk.pdf">here</a>.</p>
+<h2 id="ripser-in-your-browser-synthetic-examples">Ripser in your browser - synthetic examples<a class="headerlink" href="#ripser-in-your-browser-synthetic-examples" title="Permanent link">&para;</a></h2>
+<p>The easiest way to run Ripser is in a live demo in your browser, for which no
+installation (and in particular, no Python) is required.
+<a href="http://live.ripser.org/">Try it out!</a>.</p>
+<h3 id="house-example-distance-matrix">House example - distance matrix<a class="headerlink" href="#house-example-distance-matrix" title="Permanent link">&para;</a></h3>
+<p>For example, we can use Ripser to compute the persistent homology of the
+Vietoris-Rips complex of the following 5 points in the plane.</p>
+<p><img alt="Points at (-1,0), (-1,2), (0,3), (1,2), and (1,0)" src="../images/houseCoord.png" /></p>
+<p>The distance matrix for these five points can be downloaded
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/distance_matrices/house_distances.txt">here</a>.
+It contains the 5x5 distance matrix corresponding to the collection of 5
+points in the plane shown above.  The contents of the file are as follows.</p>
+<div class="highlight"><pre><code class="hljs text">0, 2.0000, 2.8284, 2.0000, 3.1623
+2.0000, 0, 2.0000, 2.8284, 3.1623
+2.8284, 2.0000, 0, 2.0000, 1.4142
+2.0000, 2.8482, 2.0000, 0, 1.4142
+3.1623, 3.1623, 1.4142, 1.4142, 0</code></pre></div>
+
+<p>At the Ripser live webpage, enter the following input (including choosing to
+upload that distance matrix file, as shown).</p>
+<p><img alt="Screenshot of Risper live webpage" src="../images/house_distances_input.png" /></p>
+<p>Ripser should give the following output in your browser.</p>
+<p><img alt="Screenshot of persistence barcode output" src="../images/house_example_output.png" /></p>
+<p>Note that the 5 connected components merge into one,
+with merging events happening at scales <span><span class="MathJax_Preview">\sqrt 2</span><script type="math/tex">\sqrt 2</script></span> and 2.
+There is a single 1-dimensional feature, beginning at scale parameter 2 and
+ending at scale parameter <span><span class="MathJax_Preview">\sqrt 8</span><script type="math/tex">\sqrt 8</script></span>.</p>
+<h3 id="house-example-point-cloud">House example - point cloud<a class="headerlink" href="#house-example-point-cloud" title="Permanent link">&para;</a></h3>
+<p>Instead of loading a distance matrix, it is also possible to to load in a set
+of points in Euclidean space, listed by their Euclidean coordinates. See, for
+example, <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/house_points.txt">this file</a>.
+It is the <span><span class="MathJax_Preview">5\times2</span><script type="math/tex">5\times2</script></span> matrix corresponding to the same collection of 5 points
+in the plane. To input a point cloud in Ripser live, simply select the option
+"point cloud" instead of "distance matrix."
+You will get the same output as above!</p>
+<p><img alt="Screenshot of point cloud input to Ripser live" src="../images/house_points_input.png" /></p>
+<h3 id="torus-example">Torus example<a class="headerlink" href="#torus-example" title="Permanent link">&para;</a></h3>
+<p>The following example computes the persistent homology barcodes of a
+<span><span class="MathJax_Preview">20\times20</span><script type="math/tex">20\times20</script></span> grid of 400 points on the unit torus <span><span class="MathJax_Preview">S^1\times S^1</span><script type="math/tex">S^1\times S^1</script></span> in
+<span><span class="MathJax_Preview">\mathbb{R}^4</span><script type="math/tex">\mathbb{R}^4</script></span>, where a small amount of noise has been added to each point.
+You can download the point cloud data file <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/torus_points.txt">here</a>.
+Only a subset of the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser input and dimension 0 output" src="../images/torus_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser dimension 1 output" src="../images/torus_points_output1.png" /></p>
+<p><img alt="Screenshot of Ripser dimension 2 output" src="../images/torus_points_output2.png" /></p>
+<p>Note that the long barcodes (roughly between scale parameter 0.7 and 1.5)
+recover the homology of the torus, with a single connected component, with
+two 1-dimensional holes, and with a single 2-dimensional hole.</p>
+<h3 id="sphere-example-with-a-python-script-to-create-the-points">Sphere example, with a Python script to create the points<a class="headerlink" href="#sphere-example-with-a-python-script-to-create-the-points" title="Permanent link">&para;</a></h3>
+<p>A set of points sampled uniformly at random from the unit sphere can be
+downloaded <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/sphere_points.txt">here</a>.  But you don't have to use that
+particular set of randomly generated points.  You can generate your own, as
+follows.</p>
+<p>Download and run the Python script
+<a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/sphere_points.py">sphere_points.py</a>.
+It will sample 500 points from the unit sphere <span><span class="MathJax_Preview">S^2</span><script type="math/tex">S^2</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^3</span><script type="math/tex">\mathbb{R}^3</script></span>,
+and then save the point cloud to a text file named <code>sphere_points.txt</code>.
+(If you have downloaded the entire code repository, you may want to move that
+file into the <code>point_clouds</code> folder.)</p>
+<p>We can compute the persistent homology barcodes in Ripser. So that the
+computation finishes, we have asked Ripser to compute only up to scale
+parameter 1.2. (One can compute larger examples after downloading Ripser to
+one's machine, as in <a href="../persistent-homology-tutorial-3/">Part 3</a> of this
+tutorial.) Only a subset of the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser output for dimension 0" src="../images/sphere_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output for dimension 1" src="../images/sphere_points_output1.png" /></p>
+<p><img alt="Screenshot of Ripser output for dimension 2" src="../images/sphere_points_output2.png" /></p>
+<p>Note that the long barcodes (roughly between scale parameter 0.55 and 1.2)
+recover the homology of the 2-sphere, with a single connected component,
+no 1-dimensional holes, and a single 2-dimensional hole.</p>
+<h3 id="cyclooctane-example">Cyclooctane example<a class="headerlink" href="#cyclooctane-example" title="Permanent link">&para;</a></h3>
+<p>This is an example with a real dataset of cyclooctane molecule conformations.</p>
+<p><img alt="Image of a cyclooctane molecule" src="../images/Cyclooctane-boat-chair-3D-balls.png" /></p>
+<p>The cyclooctane molecule consists of a ring of 8 carbon atoms (shown in black),
+each bonded to a pair of hydrogen atoms (shown in white).</p>
+<p>The cyclooctane molecule C<sub>8</sub>H<sub>16</sub> consists of a ring of 8
+carbons atoms, each bonded to a pair of hydrogen atoms. A conformation of this
+molecule is a chemically and physically possible realization in 3D space,
+modulo translations and rotations. The locations of the carbon atoms in a
+conformation determine the locations of the hydrogen atoms via energy
+minimization, and hence each molecule conformation can be mapped to a point in
+<span><span class="MathJax_Preview">\mathbb{R}^{24}=\mathbb{R}^{8\times3}</span><script type="math/tex">\mathbb{R}^{24}=\mathbb{R}^{8\times3}</script></span>, as there are eight carbon atoms in the
+molecule and each carbon location is represented by three coordinates <span><span class="MathJax_Preview">x,y,z</span><script type="math/tex">x,y,z</script></span>.
+This map realizes the conformation space of  cyclooctane as a subset of
+<span><span class="MathJax_Preview">\mathbb{R}^{24}</span><script type="math/tex">\mathbb{R}^{24}</script></span>.</p>
+<p>It turns out that the conformation space is a two-dimensional stratefied space,
+i.e., a two-dimensional manifold with singularities.  Furthermore, Brown et al.
+(2008), Martin et al. (2010), and Martin and Watson (2011) show that the
+conformation space of  cyclooctane is the union of a sphere with a Klein
+bottle, glued together along two circles of singularities.  (See Chapter 10 of
+<a href="https://ds4m.github.io/">Data Science for Mathematicians</a> for more detail, or
+Figures 7 and 8 in Martin and Watson (2011).) Indeed, the algorithm they
+develop allows them to triangulate this conformation space from a finite
+sample.</p>
+<p>Zomorodian (2012) uses the cyclooctane dataset as an example to show that we
+can efficiently recover the homology groups of the conformation space using
+persistent homology. In this section we essentially follow Zomorodian's
+example. We begin with a sample of 1,000 points on the conformation space.
+(This data is publicly available at <a href="https://www.sandia.gov/smartin/software.html">Shawn Martin's webpage</a>.)
+We then compute the resulting persistent homology. We obtain the Betti numbers
+<span><span class="MathJax_Preview">b_0=b_1=1</span><script type="math/tex">b_0=b_1=1</script></span> and <span><span class="MathJax_Preview">b_2=2</span><script type="math/tex">b_2=2</script></span>, which match the homology groups of the union of a
+sphere with a Klein bottle, glued together along two circles of singularities.</p>
+<p>The following example computes the persistent homology barcodes of 1,000 points
+from the configuration space of cyclooctane molecules in <span><span class="MathJax_Preview">\mathbb{R}^{24}</span><script type="math/tex">\mathbb{R}^{24}</script></span>.
+This dataset is available <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/cyclooctane_points.txt">here</a>.</p>
+<p>So that the computation finishes, we have asked Ripser to compute only up to
+scale parameter 1.3. (One can compute larger examples after downloading Ripser
+to one's machine, as in <a href="../persistent-homology-tutorial-3/">Part 3</a> of this
+tutorial.) Only a subset of the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser output in dimension 0" src="../images/cyclooctane_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 1" src="../images/cyclooctane_points_output1.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 2" src="../images/cyclooctane_points_output2.png" /></p>
+<p>The long barcodes (roughly between scale parameter 0.65 and 1.25), with one
+connected component, one 1-dimensional hole, and two 2-dimensional holes, match
+the homology of the union of a sphere with a Klein bottle, glued together along
+two circles of singularities.</p>
+<h3 id="optical-image-patch-example">Optical image patch example<a class="headerlink" href="#optical-image-patch-example" title="Permanent link">&para;</a></h3>
+<p>This is an example with a real dataset of optical image patch data.</p>
+<p>The optical image database collected by van Hateren and van der Schaaf (1998)
+contains black and white digital photographs from a variety of indoor and
+outdoor scenes. Lee et al. (2003) study <span><span class="MathJax_Preview">3\times3</span><script type="math/tex">3\times3</script></span> patches from these images,
+and Carlsson et al. (2008) continue the analysis of image patches using
+persistent homology. Carlsson et al. (2008) begin with a large collection of
+high-contrast, normalized <span><span class="MathJax_Preview">3\times3</span><script type="math/tex">3\times3</script></span> pixel patches, each thought of as a point
+in <span><span class="MathJax_Preview">\mathbb{R}^9</span><script type="math/tex">\mathbb{R}^9</script></span>. They change to the Discrete Cosine Transform (DCT) basis,
+which maps the patches to the unit sphere <span><span class="MathJax_Preview">S^7</span><script type="math/tex">S^7</script></span> in <span><span class="MathJax_Preview">\mathbb{R}^8</span><script type="math/tex">\mathbb{R}^8</script></span>.  They select
+from this space the 30% densest vectors, where density is based on the distance
+from a point to its 300<sup>th</sup> nearest neighbor. In Carlsson et al.  (2008), this
+dense core subset is denoted <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span>. In the next example we verify the
+result from Carlsson et al. (2008): <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span> has the topology of a circle.</p>
+<p>The following example computes the persistent homology barcodes of 1,000 points
+from <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span>.
+The dataset can be downloaded <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/optical_k300_points.txt">here</a>.</p>
+<p>So that the computation finishes, we have asked Ripser to compute only up to
+scale parameter 1.3. (One can compute larger examples after downloading Ripser
+to one's machine, as in <a href="../persistent-homology-tutorial-3/">Part 3</a> of this
+tutorial.) Only a subset of the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser output in dimension 0" src="../images/optical_k300_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 1" src="../images/optical_k300_points_output1.png" /></p>
+<p>The long barcodes (roughly between scale parameter 0.5 and 1.25), with one
+connected component and one 1-dimensional hole, have the homology of a circle.
+This is good evidence that the core subset <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span> is well-approximated by
+a circle.</p>
+<p>We plot the projection of these points onto the first two linear gradient
+Discrete Cosine Transform basis vectors.</p>
+<p><img alt="Graph of the projection just described" src="../images/optical_k300_projected.png" /></p>
+<p>The projection of <span><span class="MathJax_Preview">X(300,30)</span><script type="math/tex">X(300,30)</script></span> above shows a circle. It is called the optical
+primary circle and is parameterized as shown below.</p>
+<p><img alt="Parameterization of a circle with 8 small black-and-white images" src="../images/primaryCircle.png" /></p>
+<p>We can also consider the 3-circle model, which arises from the dataset
+<span><span class="MathJax_Preview">X(15,30)</span><script type="math/tex">X(15,30)</script></span> that corresponds to a more local estimate of density.
+The dataset can be downloaded <a href="https://github.com/ds4m/ds4m.github.io/tree/master/chapter-10-resources/point_clouds/optical_k15_points.txt">here</a>.</p>
+<p>So that the computation finishes, we select only 1,000 points from <span><span class="MathJax_Preview">X(15,30)</span><script type="math/tex">X(15,30)</script></span>,
+and we have asked Ripser to compute only up to scale parameter 1.2. (One can
+compute larger examples after downloading Ripser to one's machine, as in
+<a href="../persistent-homology-tutorial-3/">Part 3</a> of this tutorial.) Only a subset of
+the intervals are shown below.</p>
+<p><img alt="Screenshot of Ripser output in dimension 0" src="../images/optical_k15_points_output0.png" /></p>
+<p><img alt="Screenshot of Ripser output in dimension 1" src="../images/optical_k15_points_output1.png" /></p>
+<p>The barcodes with one connected component and five 1-dimensional holes
+correspond to the 3-circle model for the core subset <span><span class="MathJax_Preview">X(15,30)</span><script type="math/tex">X(15,30)</script></span>. Much more
+convincing (longer) intervals can be obtained by using more points and
+computing with Ripser downloaded to your local machine.</p>
+<p>We plot the projection of these points onto the first two linear gradient
+Discrete Cosine Transform basis vectors.</p>
+<p><img alt="Graph of the projection just described" src="../images/nk15c30.png" /></p>
+<p>The corresponding three-circle model for optical images is shown below.</p>
+<p><img alt="Three-circle model for optical images" src="../images/threeCircle.png" /></p>
+<hr />
+<p>(See also <a href="../persistent-homology-tutorial-2/">Part 2</a>,
+<a href="../persistent-homology-tutorial-3/">Part 3</a>, and
+<a href="../persistent-homology-tutorial-4/">Part 4</a>.)</p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="container-fluid wm-page-content">
+      <p>
+        <a href="https://github.com/ds4m/ds4m.github.io/edit/master/docs/persistent-homology-tutorial-1.md"><i class="fa fa-github"></i>
+Edit on GitHub</a>
+      </p><p>Copyright 2020 Nathan Carter and several other contributors</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+
+</body>
+</html>
