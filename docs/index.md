@@ -5,8 +5,8 @@
 
 The book *Data Science for Mathematicians* is to appear in 2020 from
 [Taylor and Francis](https://taylorandfrancis.com/).
-
-[You can pre-order the book on Amazon here.](https://www.amazon.com/Science-Mathematicians-Chapman-Handbooks-Mathematics/dp/0367027054/)
+ * [Book homepage on T&F site](https://www.taylorfrancis.com/books/9780429398292)
+ * [Pre-order page on Amazon](https://www.amazon.com/Science-Mathematicians-Chapman-Handbooks-Mathematics/dp/0367027054/)
 
 ## Table of Contents
 
