@@ -1,0 +1,38 @@
+---
+title: "Figure 2.1"
+author: "Sean Raleigh"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+# From "Programming with Data", Chapter 2 of *Data Science for Mathematicians*
+
+In Markdown, text can be formatted with *italics*, **bold**, ***bold italics***, ~~strikethrough~~, and `monospaced` text for code.
+
+There is support for LaTeX, either inline math, $x = \frac{-b \pm \sqrt{b^{2} - 4ac}}{2a}$, or displayed math:
+
+$$i\hbar \frac{\partial}{\partial t}\lvert \Psi(\mathbf{r}, t) \rangle = \hat{H} \lvert \Psi(\mathbf{r}, t) \rangle.$$
+
+You can create block quotes:
+
+> This is a block quote.
+
+Or horizontal rules:
+
+***
+
+* Bullet-
+* pointed
+* lists
+  * with
+  * indented
+    * outline
+    * capabilities
+    
+Or numbered lists:
+
+1. Numbered
+2. Lists
+
+

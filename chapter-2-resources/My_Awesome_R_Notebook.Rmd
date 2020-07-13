@@ -1,0 +1,22 @@
+---
+title: "My Awesome R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+R notebooks don't use cells like Jupyter notebooks. They are plain text files with **Markdown formatting**. They can either be viewed as such, or processed into PDF, HTML, or Word files.
+
+R notebooks have code "chunks" that run code. The chunks below run R code (and that's the standard way to use an R notebook), but they can also run other languages (like Python).
+
+```{r}
+2+2
+```
+```{r}
+goals <- c('Study data science.', 'Find some data.',
+           'Run some algorithms.', 'Profit!')
+for (i in seq_along(goals)) {
+    cat("Goal #", i, ": ", goals[i], "\n", sep = "")
+}
+```
+

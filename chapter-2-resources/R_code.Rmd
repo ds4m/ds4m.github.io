@@ -1,0 +1,224 @@
+---
+title: "R code"
+author: "Sean Raleigh"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_notebook: default
+---
+
+# From "Programming with Data", Chapter 2 of *Data Science for Mathematicians*
+
+## Section 2.3.1
+
+The following R code calculates the mean of 10 randomly sampled values from a uniform distribution on [0, 1] (`runif` stands for “random uniform”) and then repeats that process 100 times.
+
+```{r}
+set.seed (42)
+simulated_data <- vector(length = 100)
+for(i in 1:100) {
+    simulated_data[i] <- mean(runif(10, 0, 1))
+}
+```
+
+
+A more flexible way to do this&mdash;and one that will usually result in fewer bugs&mdash;is to give names to various parameters and assign them values once at the top:
+
+```{r}
+set.seed (42)
+reps <- 100
+n <- 10
+lower <- 0
+upper <- 1
+simulated_data <- vector(length = reps)
+for(i in 1:reps) {
+    simulated_data[i] <- mean(runif(n, lower , upper))
+}
+```
+
+
+## Section 2.3.5
+
+In preparation for the example from the text, load the `testthat` package. (If the following command does not work, you may need to `install.packages("testthat")` first.)
+
+```{r}
+library(testthat)
+```
+
+Define a simple function called `test_parity`:
+
+```{r}
+test_parity <- function(int_value) {
+    parity <- (int_value) %% 2
+    if (parity == 0) print("even")
+    if (parity == 1) print("odd")
+}
+```
+
+Make sure the file `parity_test_file.R` is located in the same directory as this notebook file. The following code will run a unit test to see if the function does the right thing with a few sample values.
+
+```{r}
+testthat::test_file("parity_test_file.R")
+```
+
+
+## Figure 2.7
+
+```{r}
+my_list <- list(
+  1:10,
+  c("Sean", "Raleigh"),
+  data.frame(letter = c("a", "b", "c", "d", "e"),
+             position = 1:5)
+)
+```
+
+```{r}
+my_list
+```
+
+
+## Section 2.4.3.2
+
+Here is a fake data frame for the "Utah" example:
+
+```{r}
+df <- data.frame(
+  lastname = c("Reed", "Reynolds", "Rice", "Richards",
+               "Richardson", "Roberts", "Roberts", "Robertson",
+               "Rogers", "Ross", "Ross", "Russell"),
+  occupation = c("plumber", "clerk", "retail", "food service",
+                 "computer engineer", "administrator",
+                 "manager", "accountant",
+                 "nurse", "server", "teacher", "mechanic"),
+  city = c("Salt Lake City", "Salt Lake City", "St. George",
+           "West Valley City", "Provo", "Murrary",
+           "Orem", "Sandy", "Draper",
+           "Cottonwood Heights", "Logan", "Ogden"),
+  state = c("UT", "ut", "Ut", "ut", "UT", "ut",
+            "UT", "ut", "Ut", "ut", "ut", "Ut")
+)
+df
+```
+
+Look at the 12th row:
+
+```{r}
+df[12, ]
+```
+If you find an instance of “Ut” in an R data frame that you want to change to “UT,” you could just note that it appears in the the 12th row and the 4th column, and fix it with code like the following one-liner.
+
+```{r}
+df[12, 4] <- "UT"
+```
+
+Now look at the 12th row again:
+
+```{r}
+df[12, ]
+```
+Now inspect the whole `state` column:
+
+```{r}
+df['state']
+```
+Since there are other instances of “Ut” in the data, it would make a lot more sense to write code to fix every instance of “Ut.” In R, that code looks like the following.
+
+```{r}
+df$state[df$state == "Ut"] <- "UT"
+```
+
+Here's the 4th column again:
+
+```{r}
+df['state']
+```
+
+Going a step further, the following code uses the `toupper` function to convert all state names to uppercase first, which would also fix any instances of “ut.”
+
+```{r}
+df$state[toupper(df$state) == "UT"] <- "UT"
+```
+
+```{r}
+df['state']
+```
+
+## Figure 2.9
+
+```{r}
+student_test_data <- data.frame(
+  student = c("A", "B"),
+  test1 = c(72, 90),
+  test2 = c(75, 92),
+  test3 = c(69, 98)
+)
+```
+
+```{r}
+student_test_data
+```
+
+Making this data "long" can be done using the `pivot_longer` function from the `tidyr` package. (If the following command does not work, you may need to `install.packages("tidyr")` first.)
+
+```{r}
+library("tidyr")
+```
+
+```{r}
+student_test_data_long <-
+    pivot_longer(student_test_data,
+                 cols = c("test1", "test2", "test3"),
+                 names_to = "test",
+                 values_to = "score")
+```
+
+```{r}
+student_test_data_long
+```
+The `pivot_wider` function transforms back to the "wide" version:
+
+```{r}
+pivot_wider(student_test_data_long,
+            id_cols = "student",
+            names_from = "test",
+            values_from = "score")
+```
+
+
+## Figure 2.10
+
+```{r}
+obs_color_data <- data.frame(
+  observation = factor(c("A", "B", "C", "D", "E", "F")),
+  color = factor(c("Red", "Red", "Blue", "Green", "Red", "Green"),
+                 levels = c("Red", "Blue", "Green"))
+)
+```
+
+```{r}
+obs_color_data
+```
+Generally speaking, categorical encoding is done behind the scenes: the functions you use to analyze data will either do it under the hood automatically when needed, or will allow you to specify that you want a certain kind of encoding as an argument to some function in your pipeline. It is rare that you would need to perform the encoding manually and store it in a data frame, as illustrated in Figure 2.10.
+
+Nevertheless, we can use the `model.matrix` function to peek under the hood at part of the process that prepares data sets for regression tasks.
+
+Here is an example of dummy encoding. Ignore the column labeled `(Intercept)`; that is part of a linear regression model that doesn't concern us here.
+
+```{r}
+model.matrix(~ color, data = obs_color_data)
+```
+
+This output is similar to the rightmost panel in Figure 2.10.
+
+If we tell R to remove the intercept term, the encoding scheme (often called a "contrast" in R and other places), becomes one-hot encoding.
+
+```{r}
+model.matrix(~ 0 + color, data = obs_color_data)
+```
+
+This is like the output in the center panel of Figure 2.10.
+
+
+
+
