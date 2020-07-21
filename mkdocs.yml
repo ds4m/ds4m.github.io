@@ -12,6 +12,7 @@ theme:
 
 nav:
     - Home: index.md
+    - Forward: forward.md
     - Chapter 1, Introduction: chapter-1-resources.md
     - Chapter 2, Programming with Data: chapter-2-resources.md
     - Chapter 3, Linear Algebra: chapter-3-resources.md

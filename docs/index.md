@@ -16,6 +16,7 @@ The book *Data Science for Mathematicians* is to appear in 2020 from
 **Foreward**
 
  * Author: [Michael Pearson](http://www.jmichaelpearson.net/)
+ * Why is this book important?  [See the Forward.](forward.md)
 
 ### Chapter 1: Introduction
 
