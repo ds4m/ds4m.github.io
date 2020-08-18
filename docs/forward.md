@@ -2,7 +2,7 @@
 # Forward
 
 Special thanks to [Michael Pearson](http://www.jmichaelpearson.net/), Executive
-Vice President of the MAA, for being willing to contribute the following Forward
+Director of the MAA, for being willing to contribute the following Forward
 to the text, and letting us publish it online as well.  He is uniquely
 positioned to make the case for the importance of this text at this time.
 
